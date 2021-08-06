@@ -16,7 +16,7 @@ title: 'Maisie Sadler'
     </li>
   {% endfor %}
 </ul>
-
+<!-- 
 ## Posts by tag
 
 {% for tag in site.tags %}
@@ -26,4 +26,4 @@ title: 'Maisie Sadler'
       <li><a href="{{ post.url }}">{{ post.title }}</a></li>
     {% endfor %}
   </ul>
-{% endfor %}
+{% endfor %} -->
