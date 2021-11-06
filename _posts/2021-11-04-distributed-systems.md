@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Distributed Systems"
-tags: distributed-systems
+title:  "Designing for Resilience in Distributed Systems"
+tags: distributed-systems resilience design architecture
 ---
 
 A system is distributed if there are multiple components spread over multiple hosts. This might be to connect more users or to be resilient and maintain availability through failure.
@@ -11,98 +11,90 @@ One way a system becomes distributed is by splitting different capabilities into
 
 A simple system is one where we can reason about the whole thing, by understanding the complete models the outputs are predictable given the inputs. If a system has too many moving parts to comprehend the entire system behaviour it can give unpredictable results, this type of system is described as a complex system.
 
-Observability is key to be able to navigate operations through a complex distributed system. We acknowledge one person cannot hold all pieces of the system in their head and that the responsibility of system design is distributed among the team, we must all understand the trade offs of charateristics made with each decision.
-
-Test knowns and experiment for unknowns.
-
-Operations through a distriuted system must design around hardware and software failures; wait, retry or cancel?
-
-Is the operation querying for data or triggering an operation? Does the query need to collect or process a lot of data to respond? Does the requester need up to date data or is it ok to be slightly stale? Can we prempt what a user might want and pre process the response ahead of time? Would the user prefer to wait for the correct response, do they mind coming back later or if we let them know when it's done?
+We acknowledge one person cannot hold all pieces of the system in their head and that the responsibility of system design is distributed among the team, we must all understand the trade offs of charateristics made with each decision.
 
 New problems -> identifiers, a common language for them to be able to ask what has happened, and for us to find out in the system.
-
-What is the bottleneck? How can we protect downstream resources or databases from being oberwhelmed? Isolate resources for critical operations so they are not effected by other issues in the system.
-
-In this article I will discuss some of the considerations to be made when designing a distributed system
 
 A distributed system must design around failure of components and 
 A well designed distributed system will be fault tolerant, highly available, consistent, recoverable and transparent to the end user.
 
 Modern systems are likely to have at least some distribution between components and must be weary of the trade offs involved when introducing more distribution into the system.
 
-Might be introducing distribution to allow new products to be added, teams to work in isolation.
+Modern systems are likely to have at least some distribution, a call from a user over the internet to the public API is distributed and has potential to fail.
+What happens if the network fails after a request has been sent but before the response comes back and the customer refreshes their page, do we need to de duplicate the requests to prevent processing two orders?
 
-A distributed system is concurrent by design, many processes will be executing at the same time.
+Resilience is the ability to maintain acceptable service levels during a system failure.
 
-To be able to keep the cognitive complexity for a team down we define domain boundaries matching the business for a team to work within.
+[Fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistributedComputing) tell us that we cannot rely on the network to be available or secure. We must make a decision for each operation when we encounter a failure; wait, retry or cancel?
 
-Fallacies of distributed systems tell us that the system will fail and we must ensure we have a plan in place for this eventuality.
-
-## Challenges
-
-Before we discuss the workaround for failures in a system, it's good to discuss the type of failures that occur and that we must design for.
-
-- Security
-- Fault tolerance
-  - node failure
-  - partition failure
-- Coordination
-
-Security ... networking, could be helped by things likea....
-Zero trust networking, fine grained controls, minimal permissions?
-
-Coordinaton - components in distributed systems run simulataneously and lack a global clock which can make it hard to design around.
-
-I want to focus mainly on designing around fault tolerance - node failure and partition failure.
+The fallacies of distributed systems tell us to design expecting an unreliable network, latency and bounded bandwidth.
 
 ## Understanding requirements of the system
 
 It is important to understand the requirements of a system as the architecture and patterns we choose will likely be a trade off between certain characteristics. Defining what is an acceptable response time and level of availability is a good place to start.
 
-We must continuously ask ourselves what happens if certain parts of the system fail.
+Some questions that can help guide understanding requirements
+
+- Is the operation querying for data or triggering an operation?
+- Does the query need to collect or process a lot of data to respond?
+- Does the user need up to date data or is it ok to be slightly stale?
+- Can we prempt what a user might want and pre process the response ahead of time?
+- Would the user prefer to wait for the correct response, do they mind coming back later or if we let them know when it's done?
+
+- What is the bottleneck?
+- How can we protect downstream resources or databases from being overwhelmed?
+- What happens if a node fails? 
+- What happens if a partition fails? 
+
+### Considerations
+
+Decisions that we make every day have trade offs and it is important that we understand what characteristics we are optimising for with a given design.
+
+- **Fault tolerant** - Can recover from component failures without performing incorrect actions
+- **Highly available** - Can restore operations, allowing it to resume service after a component has failed
+- **Consistent** - Can coordinate actions by multiple components in the presence of concurrency and failure
+- **Cost efficient** - We must keep spending in check to keep the product adding value
 
 ## Observability
 
-Monitor how changes to the system effect latency and availability. Was it the right decision. Important to collect data and revert if it isn't helping. It's a bet and we can learn and retry.
+Observability is key to be able to navigate operations through a complex distributed system.
+
+It allows us to define the "steady-state" of our system, for example "We expect 99% availability while processing 200 orders per second".
+
+Monitor how changes to the system effect latency and availability.
 
 Use observability to find bottlenecks.
 
 Operational visibility and alerts
 
-## Characteristics
-
-What characteristics are available and do we want to optimise for?
-
-There are some charecteristics available to us in a distributed system and given the fallacies listed above we cannot have all of them all the time. There are different patterns available that optimise for certain characteristics at the expense of others
-
-- **Fault tolerant** - Can recover from component failures without performing incorrect actions
-- **Highly available** - Can restore operations, 
-- **Cost** - We must keep spending in check to keep the product adding value
-
-If not fault tolerant, a system might require some manual adjustments after a failure.
-
 ## Design patterns
 
-Ok ok get to it Maisie...
+So what patterns can we use to add resilience into our system?
 
 ### Caching
 
-Caching is good when it is more important to return something quickly than to return the most up to date data or if the data does not change very often. If there are many requests using the same data caching, even over a small amount of time, can be beneficial. This can also be done at various parts of the stack.
+Caching is good for operations that prefer to return something quickly than to return the most up to date data. If there are many requests using the same data caching, even over a small amount of time, can be beneficial. This can also be done at various parts of the stack.
 
 The system should eventually update and be correct and this type of system is known as eventually consistent.
+
+Can we prempt what the user will request and cache the value ahead of time?
+
+### Isolation
+
+Critical operations can be isolated onto separate components and their resources can be isolated, this prevents them from being affected by failure in other parts of the system.
+
+#### Coupling
+
+Components are coupled if changing one implies changing the other. Coupled systems are hard to change.
 
 ### Events
 
 Using events for durability
-- Capture request as an event, low failure
-- Request can be processed and retried on failure
-- Return when completed
-
-Can use events to cache for writes
-- Save data to a queue and process the messages in a worker service to avoid overloading the database
-- Need to use a durable queue.
 
 Increase system availability by durably capturing the request in a queue and processing it without overwhelming the system.
+
+Can use events to cache for writes
+- Save data to a queue and process the messages in a worker service to avoid overloading downstream components or databases
 
 Increases availability by allowing an operation to resume after a component has failed.
 
@@ -120,11 +112,7 @@ This introduces a potentially new issue if the command is executed and the proce
 
 The other issue that can be introduced here is ordering, if the messages get out of order an earlier message could undo the work of a more recent message. This is something that can be configured in a queue, or potentially dealt with using timestamps or versions.
 
-Event driven architecture is loosely coupled because the event doesn't know about the consequences of it's cause.
-
-Events allow asynchronous processing but are not a way to decouple components. The producing and consuming components share a contract for the event and face the same challenges to contract changes as a direct call, if not more complicated because an unknown number of consumers could be using the event.
-
-### Isolating resources
+Event driven architecture is loosely coupled because the event doesn't know about the consequences it can cause. Designing and sharing a contract is important.
 
 ### Degrading functionality
 
@@ -148,17 +136,6 @@ It is worth considering how long is "a long time" for each operation and adjusti
 
 Similar to events, if the process is not idempotent then the request can only be retried if provisions have been put in place to deal with duplicates.
 
-### Use these requirements to drive architectural decisions
-
-A plan in place for when things do go down
-- Can we degrade functionality?
-  - Is it sufficient to return a partial response?
-
-## Coupling
-
-- coupling related to cost of change
-- highly coupled systems are hard to change
-
 ## Scaling
 
 Scaling
@@ -166,32 +143,13 @@ Scaling
 - adding bigger resources
 - worker processes for async tasks and batch jobs
 
+Adding more resources to be able to handle more requests.
+
+Another option here is to shard the system, if the operations a component is processing can be logically separated then perhaps the component can be split to allow each to process fewer requests.
+
 Must be cautious of overwhelming downstream resources or availability
 
 ### Redundancy or active/passive
-
-## Databases
-
-Scaling stateless systems is easy, but what about when you have data.
-
-Again it depends on the use case,
-A AP system that is prioritising Availability over consistency can 
- if optimising the system to scale for reads and the system can be eventually consistent
---> also adds resilience
-
-If the system is scaling for writes, then a databae that supports sharding might be a good solution.
-
-### Consistency or Availablity
-
-CAP theorem states that a system must choose 2 out of Consistency, Availability and Partition Tolerance.
-
-Network partitions will happen so a distributed system must decide whether to be Available or Consistent. In other words should it cancel the operation reducing availability or should it proceed with the operation risking inconsistency?
-A system favouring availability is known as eventually consistent, it favours low latency and successful responses over returning the most up to date data.
-A system favouring consistency is known as strongly consistent, it favours up to date data over latency.
-
-## Resilience
-
-The fallacies of distributed systems tell us to design expecting an unreliable network, latency and bounded bandwidth.
 
 ## Other considerations
 
@@ -274,25 +232,5 @@ Distributed systems are part of life working on modern software
 - 🕵️‍♀️ Ensure the system is observable
 - 📝 Hypthesise about the behaviour of your system under failure
 - 🧪 Test the failure in a controlled experiment
+- 🧪 Test knowns and experiment for unknowns
 - 🤓 Learn, improve, repeat
-
----------
-
-## Product thinking and knowing your customers
-
-Domain driven design and having a shared language between engineers and domain experts.
-
-Extend this to having shared language between customers and engineers.
-
-## XP Processes
-
-Things to get in
-- Product thinking
-- DDD
-- XP and TDD?
-  - Need this basic layer in to be able to scale successfully
-- Coupling
-- CAP Theorem
-- what happens if the process crashes right now?
-- Defining domain boundaries
-
