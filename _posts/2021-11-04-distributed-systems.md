@@ -9,6 +9,12 @@ Or it could be to isolate critical services or allow teams to independently main
 
 One way a system becomes distributed is by splitting different capabilities into different components and another is to horizontally scale a component to introduce resilience to faults.
 
+A simple system is one where we can reason about the whole thing, by understanding the complete models the outputs are predictable given the inputs. If a system has too many moving parts to comprehend the entire system behaviour it can give unpredictable results, this type of system is described as a complex system.
+
+Observability is key to be able to navigate operations through a complex distributed system. We acknowledge one person cannot hold all pieces of the system in their head and that the responsibility of system design is distributed among the team, we must all understand the trade offs of charateristics made with each decision.
+
+Test knowns and experiment for unknowns.
+
 Operations through a distriuted system must design around hardware and software failures; wait, retry or cancel?
 
 Is the operation querying for data or triggering an operation? Does the query need to collect or process a lot of data to respond? Does the requester need up to date data or is it ok to be slightly stale? Can we prempt what a user might want and pre process the response ahead of time? Would the user prefer to wait for the correct response, do they mind coming back later or if we let them know when it's done?
@@ -61,6 +67,8 @@ Monitor how changes to the system effect latency and availability. Was it the ri
 
 Use observability to find bottlenecks.
 
+Operational visibility and alerts
+
 ## Characteristics
 
 What characteristics are available and do we want to optimise for?
@@ -69,6 +77,7 @@ There are some charecteristics available to us in a distributed system and given
 
 - **Fault tolerant** - Can recover from component failures without performing incorrect actions
 - **Highly available** - Can restore operations, 
+- **Cost** - We must keep spending in check to keep the product adding value
 
 If not fault tolerant, a system might require some manual adjustments after a failure.
 
@@ -84,14 +93,36 @@ The system should eventually update and be correct and this type of system is kn
 
 ### Events
 
-If the work to be done to execute a command or retrieve data for a request could take a lot of time or processing power then events could be a good choice for coordinating this work.
+Using events for durability
+- Capture request as an event, low failure
+- Request can be processed and retried on failure
+- Return when completed
 
-Events allow us to durably capture a request and process it without overwhelming the system. If latency is becoming an issue then the component processing the messages from the queue can be horizontally scaled. If there is an error while processing then the messages can be requeued and reprocesssed.
-The queue might require the processing application to explicitly delete the message once it has completed, in this case either the message should be idempotent or a way to de-duplicate the request before a critical point.
+Can use events to cache for writes
+- Save data to a queue and process the messages in a worker service to avoid overloading the database
+- Need to use a durable queue.
 
-One way to achieve availability and return the latest response if the client does not need a response immediately is to use events. , for each incoming request save the event to a durable queue and . Because the initial request is simple, it is much more likely to return successfully.
+Increase system availability by durably capturing the request in a queue and processing it without overwhelming the system.
 
 Increases availability by allowing an operation to resume after a component has failed.
+
+Take the following example
+
+![]()
+
+A partition failure between the edge API and processor could cause the request to fail, similarly if the processor crashes or is overwhelmed by requests.
+
+![]()
+
+In this diagram we have captured the request to execute a command in a queue which the processor can work through in it's own time. If there is an error while processing the command it can be requeued and reprocessed when the system is healthy. The queue length can be monitored and the processor can be scaled horizontally to handle more requests.
+
+This introduces a potentially new issue if the command is executed and the process crashes before confirming it has processed the message to the queue. If the command can be reprocessed multiple times with the same result it is idempotent, otherwise the requeusts must be de de-duplicated before a critical point.
+
+The other issue that can be introduced here is ordering, if the messages get out of order an earlier message could undo the work of a more recent message. This is something that can be configured in a queue, or potentially dealt with using timestamps or versions.
+
+Event driven architecture is loosely coupled because the event doesn't know about the consequences of it's cause.
+
+Events allow asynchronous processing but are not a way to decouple components. The producing and consuming components share a contract for the event and face the same challenges to contract changes as a direct call, if not more complicated because an unknown number of consumers could be using the event.
 
 ### Isolating resources
 
@@ -107,7 +138,7 @@ Consider feature toggle for quickly enabling and disabling new features and path
 
 A bulkhead is a term taken from shipping where the ship is designed so that in the event of a failure a part of a ship can be sealed off to protect the rest of the ship. Similarly we can design our systems into isolated components that can be switched off in the event of failure to allow the rest of the system to continue running smoothly.
 
-A circuit breaker is a mechanism to automatically seal a bulkhead, protecting downstream resources and also not exhausting the application and allowing it to continue processing other potentially successful operation.
+A circuit breaker is a mechanism to automatically seal a bulkhead, protecting downstream resources and also not exhausting the application and allowing it to continue processing other potentially successful operation. Circuit breakers also allow downstream resources to recover without being overloaded with requests.
 
 ### Timeouts and Retries
 
@@ -115,17 +146,13 @@ If a call is taking a long time in a distributed system, it could be because it 
 
 It is worth considering how long is "a long time" for each operation and adjusting this logic accordingly.
 
+Similar to events, if the process is not idempotent then the request can only be retried if provisions have been put in place to deal with duplicates.
+
 ### Use these requirements to drive architectural decisions
 
 A plan in place for when things do go down
 - Can we degrade functionality?
   - Is it sufficient to return a partial response?
-- Implement circuit breaker to fail faster to clients and allow downstream to recover
-- Bulkhead where functionality is taken out of service to allow other parts to run successfully
-  - If something is saturating network or has high CPU it can be switched off to save the ship
-  - The more isolated components are the less likely this will be necessary
-- Idempotency and retries
-  - If a call is idempotent it can be retried
 
 ## Coupling
 
@@ -141,20 +168,7 @@ Scaling
 
 Must be cautious of overwhelming downstream resources or availability
 
-## Event based systems
-
-Using events for durability
-- Capture request as an event, low failure
-- Request can be processed and retried on failure
-- Return when completed
-
-Can use events to cache for writes
-- Save data to a queue and process the messages in a worker service to avoid overloading the database
-- Need to use a durable queue.
-
-Event driven architecture is loosely coupled because the event doesn't know about the consequences of it's cause.
-
-Events allow asynchronous processing but are not a way to decouple components. The producing and consuming components share a contract for the event and face the same challenges to contract changes as a direct call, if not more complicated because an unknown number of consumers could be using the event.
+### Redundancy or active/passive
 
 ## Databases
 
@@ -183,9 +197,15 @@ The fallacies of distributed systems tell us to design expecting an unreliable n
 
 Team structure
 
-Conways law, domain boundaries
+Conways law, domain boundaries, using common domain language having the team understand why they're doing what they're doing will contribute towards them making the right decision and keeping the code clean.
 
-XP teams, good practices, lots of small changes ability to roll back, focus on observability.
+High performing teams are highly aligned and loosely coupled.
+
+A step further would be having the whole team interacting with customers and involved in product discovery.
+
+XP teams, well defined practices supported team and company values, lots of small changes ability to roll back, focus on observability.
+
+Values, principles and practices
 
 ### System design and team structure
 
@@ -211,13 +231,19 @@ making system robust
 
 A practice to gain confidence in the uncertainty of distributed system by facilitating experiments to uncover systemic weaknesses.
 
+Have a rollback plan in place and revert once you have learnt something
+
 One off experiments
 Game days
 Automated continuous failures
 
+![one](./chaos-eng)
+
+![two](./img/chaos-eng)
+
 Define steady state of system.
 
-Create a hypothesis about how the system will perform under failure, for example "We expect the system to maintain 99.9% availability while handling 200 requests per second while 20% of nodes are failing".
+Build hypothesis around steady state behaviour under failure conditions, for example "We expect the system to maintain 99.9% availability while handling 200 requests per second while 20% of nodes are failing".
 
 Run an experiment to test the theory, build confidence in test environment and work towards being able to run in production to see how it reacts under real load.
 
@@ -225,8 +251,9 @@ Verify - did something unexpected happen?
 
 Improve system using learnings from experiment, redefine steady state and go again!
 
-Once happy with the results, 
-The test can be automated and re run periodically to act as a regression test.
+Choose experiments based on real world events and incidents.
+Run the experiment in production.
+Once happy with the results, automate and run periodically to act as a regression test.
 
 ### Benefits
 
