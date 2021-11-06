@@ -237,7 +237,8 @@ One off experiments
 Game days
 Automated continuous failures
 
-![one](maisiesadler.github.io/assets/chaos-eng.png)
+![one](maisiesadler/maisiesadler.github.io/assets/chaos-eng.png)
+![one](maisiesadler/maisiesadler.github.io/docs/assets/chaos-eng.png)
 ![again](./chaos-eng.png)
 
 ![two](./img/chaos-eng.png)
