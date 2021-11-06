@@ -31,7 +31,7 @@ Deciding what an acceptable response time and level of availability is a good pl
 
 ## Observability
 
-Observability is key to be able to navigate operations through a complex distributed system. It gives us operational visibility and helps us understand system bottlenecks. We can create alerts if the system is not behaving as expected.
+Observability is key to be able to navigate operations through a complex distributed system. It gives us operational visibility and helps us understand system bottlenecks.
 
 We can define expected behaviour of our system under normal conditions, for example "We expect 99% availability while processing 200 orders per second".
 
@@ -102,7 +102,7 @@ Feature toggle can be used to manually enable and disable features and paths wit
 Logic for automatically sealing a bulkhead on certain failures, requests can be intermittently let through to test if the downstream resources are available before resuming service.
 This protects downstream resources and allows the application to continue processing other potentially successful operations.
 
-### Timeouts and Retries
+#### Timeouts and Retries
 
 If a call is taking a long time in a distributed system, it could be because it is connected to a bad or overwhelmed instance and sometimes it is better to cancel the call and retry.
 
