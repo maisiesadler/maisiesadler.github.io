@@ -237,9 +237,10 @@ One off experiments
 Game days
 Automated continuous failures
 
-![one](./chaos-eng)
+![one](maisiesadler.github.io/assets/chaos-eng.png)
+![again](./chaos-eng.png)
 
-![two](./img/chaos-eng)
+![two](./img/chaos-eng.png)
 
 Define steady state of system.
 
