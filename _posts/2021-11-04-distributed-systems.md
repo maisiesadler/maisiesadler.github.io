@@ -13,17 +13,10 @@ A simple system is one where we can reason about the whole thing, by understandi
 
 We acknowledge one person cannot hold all pieces of the system in their head and that the responsibility of system design is distributed among the team, we must all understand the trade offs of charateristics made with each decision.
 
-New problems -> identifiers, a common language for them to be able to ask what has happened, and for us to find out in the system.
-
-A distributed system must design around failure of components and 
-A well designed distributed system will be fault tolerant, highly available, consistent, recoverable and transparent to the end user.
-
-Modern systems are likely to have at least some distribution between components and must be weary of the trade offs involved when introducing more distribution into the system.
+Resilience is the ability to maintain acceptable service levels during a system failure.
 
 Modern systems are likely to have at least some distribution, a call from a user over the internet to the public API is distributed and has potential to fail.
 What happens if the network fails after a request has been sent but before the response comes back and the customer refreshes their page, do we need to de duplicate the requests to prevent processing two orders?
-
-Resilience is the ability to maintain acceptable service levels during a system failure.
 
 [Fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistributedComputing) tell us that we cannot rely on the network to be available or secure. We must make a decision for each operation when we encounter a failure; wait, retry or cancel?
 
@@ -50,6 +43,8 @@ Some questions that can help guide understanding requirements
 
 Decisions that we make every day have trade offs and it is important that we understand what characteristics we are optimising for with a given design.
 
+A well designed distributed system will be fault tolerant, highly available, consistent, recoverable and transparent to the end user.
+
 - **Fault tolerant** - Can recover from component failures without performing incorrect actions
 - **Highly available** - Can restore operations, allowing it to resume service after a component has failed
 - **Consistent** - Can coordinate actions by multiple components in the presence of concurrency and failure
@@ -66,6 +61,10 @@ Monitor how changes to the system effect latency and availability.
 Use observability to find bottlenecks.
 
 Operational visibility and alerts
+
+In the event of failure it is useful to have a way for us to 
+
+New problems -> identifiers, a common language for them to be able to ask what has happened, and for us to find out in the system.
 
 ## Design patterns
 
@@ -149,31 +148,19 @@ Another option here is to shard the system, if the operations a component is pro
 
 Must be cautious of overwhelming downstream resources or availability
 
-### Redundancy or active/passive
-
 ## Other considerations
 
-Team structure
+Defining domain boundaries lowers cognitive complexity for engineers.
 
-Conways law, domain boundaries, using common domain language having the team understand why they're doing what they're doing will contribute towards them making the right decision and keeping the code clean.
-
-High performing teams are highly aligned and loosely coupled.
+Using common language between engineers and domain experts, and ensuring the whole team understand _why_ will contribute towards them making the right decision and keeping the code clean.
 
 A step further would be having the whole team interacting with customers and involved in product discovery.
 
-XP teams, well defined practices supported team and company values, lots of small changes ability to roll back, focus on observability.
-
-Values, principles and practices
-
 ### System design and team structure
 
-Teams should be able to move independently, High performing teams are highly aligned and loosey coupled.
+[Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of system will reflect the organization that built it. This implies that loosely coupled systems are created by loosely coupled teams.
 
-Conway's law
-- loosely coupled teams create loosely coupled systems?
-
-alignment, values -> principles and practices
-- Visibility over what other teams are doing, problems that are being solved
+Though loosely coupled, teams should be highly aligned. Visibility between teams helps to form shared values, principles and practices.
 
 ## Testing system resilience
 
@@ -183,17 +170,13 @@ Chaos Engineering is a practice where you run experiments on a system to observe
 
 Be of the mindset that it will fail and force it to happen in hours when you can be around to monitor observe and improve.
 
-making system robust
-
 ### Chaos Engineering
 
-A practice to gain confidence in the uncertainty of distributed system by facilitating experiments to uncover systemic weaknesses.
-
-Have a rollback plan in place and revert once you have learnt something
-
-One off experiments
-Game days
-Automated continuous failures
+1. Define steady state of system.
+2. Build hypothesis around steady state behaviour under failure conditions, for example "We expect the system to maintain 99.9% availability while handling 200 requests per second while 20% of nodes are failing".
+3. Run an experiment to test the theory, build confidence in test environment and work towards being able to run in production to see how it reacts under real load.
+4. Verify - did something unexpected happen?
+5. Improve system using learnings from experiment, redefine steady state and go again!
 
 ![one](maisiesadler/maisiesadler.github.io/assets/chaos-eng.png)
 ![one](maisiesadler/maisiesadler.github.io/docs/assets/chaos-eng.png)
@@ -201,19 +184,11 @@ Automated continuous failures
 
 ![two](./img/chaos-eng.png)
 
-Define steady state of system.
+Start with one-off experiments or game days. When the experiment is well defined it can be automated and ran continuously.
 
-Build hypothesis around steady state behaviour under failure conditions, for example "We expect the system to maintain 99.9% availability while handling 200 requests per second while 20% of nodes are failing".
-
-Run an experiment to test the theory, build confidence in test environment and work towards being able to run in production to see how it reacts under real load.
-
-Verify - did something unexpected happen?
-
-Improve system using learnings from experiment, redefine steady state and go again!
-
-Choose experiments based on real world events and incidents.
-Run the experiment in production.
-Once happy with the results, automate and run periodically to act as a regression test.
+- Choose experiments based on real world events and incidents
+- Once confident, run the experiment in production
+- Have a rollback plan in place and revert once you have learned something
 
 ### Benefits
 
