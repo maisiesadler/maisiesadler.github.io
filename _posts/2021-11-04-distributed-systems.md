@@ -1,27 +1,27 @@
 ---
 layout: post
-title:  "Resilience in Complex Distributed Systems"
+title:  "Resilience in Distributed Systems"
 tags: distributed-systems resilience design architecture
 ---
 
-This might be to connect more users or to be resilient and maintain availability through failure.
-Or it could be to isolate critical services or allow teams to independently maintain different system capabilities.
-
-Modern systems are increasingly complex and distributed, this article discusses different techniques to increase system resilience.
+Modern systems are increasingly complex and distributed.
+This article outlines some patterns and practices for adding resilience to complex, distributed systems.
 
 First a few defintions,
 
-- **Distributed Systems** - A system is distributed if there are multiple components spread over multiple hosts.
-- **Complex Systems** - A system is complex if there are enough moving parts that an individual cannot hold the model in their head, the outputs are unpredictable given the inputs
 - **Resilience** - Resilience is the ability to maintain acceptable service levels during a system failure
-
-One way a system becomes distributed is by splitting different capabilities into different components and another is to horizontally scale a component to introduce resilience to faults.
+- **Complex Systems** - A system is complex if there are enough moving parts that an individual cannot hold the model in their head, the outputs are unpredictable given the inputs
+- **Distributed Systems** - A system is distributed if there are multiple components spread over multiple hosts
 
 [Fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistributedComputing) tell us that we cannot rely on the network to be reliable or secure. We must make a decision for each operation when we encounter a failure; wait, retry or cancel?
 
 ## Understanding requirements of the system
 
-It is important to understand the requirements of a system as the architecture and patterns we choose will likely be optimised towards certain behaviours.
+Understand the requirements of a system is important as patterns we choose will likely be optimised towards certain behaviours.
+
+Decisions that we make every day have trade offs and it is important that we understand what characteristics we are optimising for with a given design.
+
+Deciding what 
 Defining an acceptable response time and level of availability is a good place to start.
 
 Some questions that can help guide understanding requirements
@@ -31,38 +31,23 @@ Some questions that can help guide understanding requirements
 - Does the user need up to date data or is it ok to be slightly stale?
 - Would the user prefer to wait for the correct response, do they mind coming back later or if we let them know when it's done?
 
-### Considerations
+### Properties of distributed systems
 
-Decisions that we make every day have trade offs and it is important that we understand what characteristics we are optimising for with a given design.
-
-A well designed distributed system will be fault tolerant, highly available, consistent, recoverable and transparent to the end user.
+Properties we strive for in distributed systems
 
 - **Fault tolerant** - Can recover from component failures without performing incorrect actions
 - **Highly available** - Can restore operations, allowing it to resume service after a component has failed
 - **Consistent** - Can coordinate actions by multiple components in the presence of concurrency and failure
+- **Transparent** - The user is unaware that processes and components are distributed across multiple computers
 - **Cost efficient** - We must keep spending in check to keep the product adding value
-
-## Complex systems
 
 ## Observability
 
-Observability is key to be able to navigate operations through a complex distributed system.
+Observability is key to be able to navigate operations through a complex distributed system. It gives us operational visibility and helps us understand system bottlenecks. We can create alerts if the system is not behaving as expected.
 
-It allows us to define the "steady-state" of our system, for example "We expect 99% availability while processing 200 orders per second".
+We can define expected behaviour of our system under normal conditions, for example "We expect 99% availability while processing 200 orders per second".
 
-Monitor how changes to the system effect latency and availability.
-
-Use observability to find bottlenecks.
-
-Operational visibility and alerts
-
-In the event of failure it is useful to have a way for us to 
-
-New problems -> identifiers, a common language for them to be able to ask what has happened, and for us to find out in the system.
-
-Changes that we make to our system to add resilience must be monitored to ensure we are making things better rather than worse.
-
-Help us understand where the bottlenecks are in our system
+When we make changes to the system we can monitor metrics such as latency and error rate to ensure we're not unintentionally degrading the user experience.
 
 ## Design patterns
 
@@ -80,7 +65,7 @@ Can we prempt what the user will request and cache the value ahead of time?
 
 Critical operations can be isolated onto separate components and their resources can be isolated, this prevents them from being affected by failure in other parts of the system.
 
-Another option here is to shard the system, if the operations a component is processing can be logically separated then perhaps the component can be split to allow each to process fewer requests.
+Isolation also allows teams to independently maintain different system capabilities.
 
 #### Coupling
 
