@@ -13,27 +13,15 @@ First a few defintions,
 - **Complex Systems** - A system is complex if there are enough moving parts that an individual cannot hold the model in their head, the outputs are unpredictable given the inputs
 - **Distributed Systems** - A system is distributed if there are multiple components spread over multiple hosts
 
-[Fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistributedComputing) tell us that we cannot rely on the network to be reliable or secure. We must make a decision for each operation when we encounter a failure; wait, retry or cancel?
+The [fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistributedComputing) tell us that we cannot rely on the network to be reliable or secure. We must make a decision for each operation when we encounter a failure; wait, retry or cancel?
 
 ## Understanding requirements of the system
 
-Understand the requirements of a system is important as patterns we choose will likely be optimised towards certain behaviours.
+Understanding the requirements of a system is important as it will help to guide our decisions for which behaviours are essential and which can be comprimised.
 
-Decisions that we make every day have trade offs and it is important that we understand what characteristics we are optimising for with a given design.
-
-Deciding what 
-Defining an acceptable response time and level of availability is a good place to start.
-
-Some questions that can help guide understanding requirements
-
-- Is the operation querying for data or triggering an operation?
-- Does the query need to collect or process a lot of data to respond?
-- Does the user need up to date data or is it ok to be slightly stale?
-- Would the user prefer to wait for the correct response, do they mind coming back later or if we let them know when it's done?
+Deciding what an acceptable response time and level of availability is a good place to start.
 
 ### Properties of distributed systems
-
-Properties we strive for in distributed systems
 
 - **Fault tolerant** - Can recover from component failures without performing incorrect actions
 - **Highly available** - Can restore operations, allowing it to resume service after a component has failed
@@ -122,7 +110,7 @@ If a call is taking a long time in a distributed system, it could be because it 
 
 Again if the process is not idempotent then the request can only be retried if provisions have been put in place to deal with duplicates.
 
-## Scaling
+### Scaling
 
 Adding more resources to be able to handle more requests.
 This can be _horizontal_ by adding more similar resources, or _veritical_ by increasing the size of existing resources.
