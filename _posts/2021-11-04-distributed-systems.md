@@ -118,7 +118,7 @@ Chaos Engineering is a practice where you run experiments on a system to observe
 4. Verify - did something unexpected happen?
 5. Improve system using learnings from experiment, redefine steady state and go again!
 
-![Chaos Engineering](./assets/img/chaos-eng.png)
+![Chaos Engineering](/assets/img/chaos-eng.png)
 
 Start with one-off experiments or game days. When the experiment is well defined it can be automated and ran continuously.
 
