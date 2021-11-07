@@ -80,19 +80,12 @@ Is it sufficient to return a partial response?
 
 Can we turn off parts of the system to protect other parts?
 
-#### Bulkheads
+A bulkhead is a pattern that does exactly that, the system is designed such that isolated functionality can be switched of in the event of failure.
 
-A bulkhead is a pattern where part of the functionality is switched off to allow the rest of the system to continue.
-The system is designed into isolated components that can be switched off in the event of failure.
+This could be a manual process with feature toggle. Or automated with circuit breakers.
 
-#### Feature toggle
-
-Feature toggle can be used to manually enable and disable features and paths without a deployment.
-
-#### Circuit breakers
-
-Logic for automatically sealing a bulkhead on certain failures, requests can be intermittently let through to test if the downstream resources are available before resuming service.
-This protects downstream resources and allows the application to continue processing other potentially successful operations.
+Circuit breakers switch off functionality on given error conditions and intermittently let traffic through to test if service can be resumed.
+This protects downstream resources and also allows the application to continue processing other potentially successful operations.
 
 #### Timeouts and Retries
 
@@ -110,7 +103,13 @@ By accepting that the system will fail we can experiment and learn how it will r
 
 ### Chaos Engineering
 
-Chaos Engineering is a practice where you run experiments on a system to observe how it reacts. This allows you to monitor system failure in controlled setting instead of allowing it to happen out of business hours.
+Chaos Engineering is a practice where you run experiments on a system to observe how it reacts.
+This gives increased understanding in the resilience of the system as it allows you to monitor system failure in a controlled setting.
+
+This can reduce on call burden not only by giving the engineers higher confidence in the system, but can serve as on call training. Engineers become familiar with the observability tools and are engaged and focused on resilience.
+
+![Chaos Engineering](/assets/img/chaos-eng.png)
+*Chaos Engineering process*
 
 1. Define steady state of system
 2. Build hypothesis around steady state behaviour under failure conditions, for example "We expect the system to maintain 99.9% availability while handling 200 requests per second while 20% of nodes are failing"
@@ -118,22 +117,11 @@ Chaos Engineering is a practice where you run experiments on a system to observe
 4. Verify - did something unexpected happen?
 5. Improve system using learnings from experiment, redefine steady state and go again!
 
-![Chaos Engineering](/assets/img/chaos-eng.png)
-
 Start with one-off experiments or game days. When the experiment is well defined it can be automated and ran continuously.
 
 - Choose experiments based on real world events and incidents
 - Once confident, run the experiment in production
 - Have a rollback plan in place and revert once you have learned something
-
-### Benefits
-
-- Higher confidence in system
-- Increased understanding of resilience of system
-- Serves as on call training and reduces on call burden
-- Engineers familiar with observability tools
-  - Engaged and focused on resilience
-  - Have these tools in mind when imlementing new features
 
 ## Other considerations
 
