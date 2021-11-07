@@ -102,20 +102,6 @@ If a call is taking a long time in a distributed system, it could be because it 
 
 Similar to events, if the operation is not idempotent then the request can only be retried if provisions have been put in place to deal with duplicates.
 
-## Other considerations
-
-Although the system is complex we can do our best to minimise accidental complexity.
-
-- Defining domain boundaries lowers cognitive complexity for engineers
-- Ensuring the whole team understand _why_ helps them to make the right decision and keep the code clean
-- Test first approach to ensure we only write the code we need
-
-### System design and team structure
-
-[Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of system will reflect the organization that built it. It follows that loosely coupled systems are created by loosely coupled teams.
-
-Though loosely coupled, teams should be highly aligned. Visibility between teams helps to form shared values, principles and practices.
-
 ## Testing system resilience
 
 It is good to understand how much failure a system can tolerate and still operate within acceptable boundaries.
@@ -132,11 +118,7 @@ Chaos Engineering is a practice where you run experiments on a system to observe
 4. Verify - did something unexpected happen?
 5. Improve system using learnings from experiment, redefine steady state and go again!
 
-![one](maisiesadler/maisiesadler.github.io/assets/chaos-eng.png)
-![one](maisiesadler/maisiesadler.github.io/docs/assets/chaos-eng.png)
-![again](./chaos-eng.png)
-
-![two](./img/chaos-eng.png)
+![Chaos Engineering](./assets/img/chaos-eng.png)
 
 Start with one-off experiments or game days. When the experiment is well defined it can be automated and ran continuously.
 
@@ -152,6 +134,20 @@ Start with one-off experiments or game days. When the experiment is well defined
 - Engineers familiar with observability tools
   - Engaged and focused on resilience
   - Have these tools in mind when imlementing new features
+
+## Other considerations
+
+Although the system is complex we can do our best to minimise accidental complexity.
+
+- Defining domain boundaries lowers cognitive complexity for engineers
+- Ensuring the whole team understand _why_ helps them to make the right decision and keep the code clean
+- Test first approach to ensure we only write the code we need
+
+### System design and team structure
+
+[Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of system will reflect the organization that built it. It follows that loosely coupled systems are created by loosely coupled teams.
+
+Though loosely coupled, teams should be highly aligned. Visibility between teams helps to form shared values, principles and practices.
 
 ## Conclusion
 
