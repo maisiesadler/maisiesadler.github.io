@@ -60,7 +60,7 @@ Events can be used to durably capture a request for an operation.
 This increases availability by allowing an operation to resume after a component has failed.
 
 A component consuming messages from a queue can process messages at a steady rate.
-This rate can be increased by scaled the component, ensuring the rate isn't so high we start overwhelming downstream resources such as databases.
+This rate can be increased by scaling the component, ensuring the rate isn't so high we start overwhelming downstream resources such as databases.
 
 This pattern introduces some complications to be aware of
 - **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must add a request identifier and de-duplicate
@@ -84,7 +84,8 @@ Can we turn off parts of the system to protect other parts?
 
 #### Bulkheads
 
-A bulkhead is a term taken from shipping where the ship is designed so that in the event of a failure a part of a ship can be sealed off to protect the rest of the ship. Similarly we can design our systems into isolated components that can be switched off in the event of failure to allow the rest of the system to continue running smoothly.
+A bulkhead is a pattern where part of the functionality is switched off to allow the rest of the system to continue.
+The system is designed into isolated components that can be switched off in the event of failure.
 
 #### Feature toggle
 
@@ -101,7 +102,7 @@ If a call is taking a long time in a distributed system, it could be because it 
 
 "A long time" could be different for each operation and we can use our observability tools to guide us here.
 
-Again if the process is not idempotent then the request can only be retried if provisions have been put in place to deal with duplicates.
+Similar to with events if the operation is not idempotent then the request can only be retried if provisions have been put in place to deal with duplicates.
 
 ## Other considerations
 
