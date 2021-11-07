@@ -108,9 +108,6 @@ This gives increased understanding in the resilience of the system as it allows 
 
 This can reduce on call burden not only by giving the engineers higher confidence in the system, but can serve as on call training. Engineers become familiar with the observability tools and are engaged and focused on resilience.
 
-![Chaos Engineering](/assets/img/chaos-eng.png)
-*Chaos Engineering process*
-
 - Start with one-off experiments or game days
 - Choose experiments based on real world events and incidents
 - Once confident, run the experiment in production
