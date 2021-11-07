@@ -70,7 +70,7 @@ Event driven architecture is loosely coupled, the event doesn't know about the c
 
 ### Isolation
 
-Critical operations can be isolated onto separate components and their resources can be isolated, this prevents them from being affected by failure in other parts of the system.
+Critical operations can be isolated into separate components and their resources can be isolated, this prevents them from being affected by failure in other parts of the system.
 
 Isolation also allows teams to independently maintain different system capabilities.
 
@@ -122,13 +122,13 @@ It is good to understand how much failure a system can tolerate and still operat
 
 By accepting that the system will fail we can experiment and learn how it will react under certain conditions.
 
-Chaos Engineering is a practice where you run experiments on a system to observe how it reacts. This allows you to monitor system failure in controlled setting instead of allowing it to happen out of business hours.
-
 ### Chaos Engineering
+
+Chaos Engineering is a practice where you run experiments on a system to observe how it reacts. This allows you to monitor system failure in controlled setting instead of allowing it to happen out of business hours.
 
 1. Define steady state of system
 2. Build hypothesis around steady state behaviour under failure conditions, for example "We expect the system to maintain 99.9% availability while handling 200 requests per second while 20% of nodes are failing"
-3. Run an experiment to test the theory, build confidence in test environment and work towards being able to run in production to see how it reacts under real load
+3. Run an experiment to test the theory
 4. Verify - did something unexpected happen?
 5. Improve system using learnings from experiment, redefine steady state and go again!
 
