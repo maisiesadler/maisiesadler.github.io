@@ -103,7 +103,7 @@ By accepting that the system will fail we can experiment and learn how it will r
 
 ### Chaos Engineering
 
-Chaos Engineering is a practice where you run experiments on a system to observe how it reacts.
+[Chaos Engineering](https://principlesofchaos.org/) is a practice of running experiments on a system to observe how it reacts.
 This gives increased understanding in the resilience of the system as it allows you to monitor system failure in a controlled setting.
 
 This can reduce on call burden not only by giving the engineers higher confidence in the system, but can serve as on call training. Engineers become familiar with the observability tools and are engaged and focused on resilience.
@@ -111,14 +111,7 @@ This can reduce on call burden not only by giving the engineers higher confidenc
 ![Chaos Engineering](/assets/img/chaos-eng.png)
 *Chaos Engineering process*
 
-1. Define steady state of system
-2. Build hypothesis around steady state behaviour under failure conditions, for example "We expect the system to maintain 99.9% availability while handling 200 requests per second while 20% of nodes are failing"
-3. Run an experiment to test the theory
-4. Verify - did something unexpected happen?
-5. Improve system using learnings from experiment, redefine steady state and go again!
-
-Start with one-off experiments or game days. When the experiment is well defined it can be automated and ran continuously.
-
+- Start with one-off experiments or game days
 - Choose experiments based on real world events and incidents
 - Once confident, run the experiment in production
 - Have a rollback plan in place and revert once you have learned something
