@@ -129,11 +129,10 @@ Though loosely coupled, teams should be highly aligned. Visibility between teams
 
 ## Conclusion
 
-Distributed systems are part of life working on modern software and it's important we understand .?
+Distributed systems are part of life working on modern software and it's important we understand the trade offs we make with each decision.
 
 - 🤔 Review if splitting up a component is the right thing to do
 - 🕵️‍♀️ Ensure the system is observable
 - 📝 Hypthesise about the behaviour of your system under failure
-- 🧪 Test the failure in a controlled experiment
 - 🧪 Test knowns and experiment for unknowns
 - 🤓 Learn, improve, repeat
