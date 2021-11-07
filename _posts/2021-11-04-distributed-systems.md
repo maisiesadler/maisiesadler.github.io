@@ -4,7 +4,6 @@ title:  "Resilience in Distributed Systems"
 tags: distributed-systems resilience design architecture
 ---
 
-Modern systems are increasingly complex and distributed.
 This article outlines some patterns and practices for adding resilience to complex, distributed systems.
 
 First a few defintions,
@@ -12,6 +11,9 @@ First a few defintions,
 - **Resilience** - Resilience is the ability to maintain acceptable service levels during a system failure
 - **Complex Systems** - A system is complex if there are enough moving parts that an individual cannot hold the model in their head, the outputs are unpredictable given the inputs
 - **Distributed Systems** - A system is distributed if there are multiple components spread over multiple hosts
+
+Modern systems are increasingly complex and distributed.
+Every engineer must understand the trade offs of every decisions and keep observability and resilience in mind.
 
 Desirable properties of distributed systems
 
