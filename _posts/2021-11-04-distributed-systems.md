@@ -19,6 +19,61 @@ Understanding the requirements of the system is important as it will help to gui
 
 The [fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistributedComputing) tell us that we cannot rely on the network to be reliable or secure. We must decide for each operation when we encounter a failure; wait, retry or cancel?
 
+## Wait
+
+How likely is it that the result is just about to be returned?
+
+If a network connection is open for an extended period not only does it have more time to fail but it is consuming resources and could block potentially successful calls.
+
+Use observability to guide what is an acceptable time to wait and use timeouts to cancel after it is unlikely to return successfully.
+
+Another option for waiting for available resources is to use events and queues, messages can be consumed at a steady rate.
+This rate can be increased by scaling the component, ensuring the rate isn't so high we start overwhelming downstream resources such as databases.
+
+## Retry
+
+In a distributed system it is possible that a process is hanging due to a transient failure and that retrying the call could be successful. This can be done in memory or by re-queuing a message.
+
+This can introduce some complications to be aware of
+- **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must add a request identifier and de-duplicate
+- **Ordering** - Out of order messages can apply updates incorrectly, this can potentially be dealt with using timestamps or versions
+- **Retry Storm** - Too many retries can end up doing more harm than good
+
+## Cancel
+
+Is it acceptable to degrade certain functionality if it means other, potentially more critical, operations can continue?
+
+Isolated functionality can be switched off using bulkheads and circuit breakers, this protects downstream resources and also allows the application to continue processing other potentially successful operations.
+Traffic can be intermittently let through to test if service can be resumed.
+
+## Other provisions
+
+There are some patterns we can use in an attempt to make it less likely to encounter a failure however, we must be aware of their trade-offs.
+
+### Scaling
+
+We can add more resources to be able to handle more requests.
+
+However, we must be cautious of overwhelming downstream resources.
+
+### Cache
+
+If we know what queries we expect to receive, we can serve the results from a cache.
+
+The trade-off here is that the user will not always see the latest data.
+
+### Isolation
+
+If critical operations are isolated then prevent them from being affected by failure in other parts of the system.
+
+Isolation also allows teams to independently maintain different system capabilities.
+
+### Events
+
+Reduce coupling between systems by using events for notifications.
+
+This is not a good pattern if the caller needs to know that the message has been processed before returning.
+
 ## Observability
 
 Observability is key to be able to navigate operations through a complex, distributed system. It gives us operational visibility and helps us understand system bottlenecks.
@@ -26,61 +81,6 @@ Observability is key to be able to navigate operations through a complex, distri
 We can define the expected behaviour of our system under normal conditions, for example, "We expect 99% availability while processing 200 orders per second".
 
 When we make changes to the system we can monitor metrics such as latency and error rate to ensure we're not unintentionally degrading the user experience.
-
-## Design patterns
-
-So what patterns can we use to add resilience into our system?
-
-### Scaling
-
-Adding more resources to be able to handle more requests.
-This can be _horizontal_ by adding more similar resources, or _vertical_ by increasing the size of existing resources.
-
-Must be cautious of overwhelming downstream resources.
-
-### Caching
-
-Increase availability and resilience by [caching](https://aws.amazon.com/caching/) data that is likely to be accessed. Either after the first time it is read, or by precalculating results when data is updated.
-If many queries now access the cache instead of getting the latest data this can greatly reduce load on the rest of the system.
-
-The trade-off here is that the user will not always see the latest data.
-
-### Events and Queues
-
-[Event-driven architecture](https://martinfowler.com/articles/201701-event-driven.html) is a loosely coupled approach that can increase system resilience by allowing an operation to resume after a component has failed.
-
-Events can be captured on queues so the consuming component can process messages at a steady rate.
-This rate can be increased by scaling the component, ensuring the rate isn't so high we start overwhelming downstream resources such as databases.
-
-This pattern introduces some complications to be aware of
-- **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must add a request identifier and de-duplicate
-- **Ordering** - Out of order messages can apply updates incorrectly, this can potentially be dealt with using timestamps or versions
-
-### Isolation
-
-Critical operations can be isolated into separate components and their resources can be isolated, this prevents them from being affected by failure in other parts of the system.
-
-Isolation also allows teams to independently maintain different system capabilities.
-
-### Degrading functionality
-
-Can we turn off parts of the system to protect other parts?
-
-A bulkhead is a pattern that does exactly that, the system is designed such that isolated functionality can be switched of in the event of failure.
-
-This could be a manual process with feature toggle. Or automated with circuit breakers.
-
-Circuit breakers switch off functionality on given error conditions and intermittently let traffic through to test if service can be resumed.
-This protects downstream resources and also allows the application to continue processing other potentially successful operations.
-
-#### Timeouts and Retries
-
-If a call is taking too long in a distributed system, it could be because there is a transient fault and sometimes it is better to cancel the call and retry.
-"Too long" could be different for each operation and we can use our observability tools to guide us here.
-
-Be aware of
-- **Duplicates** - In case the operation failed after it was received, we can only retry if there will be no side effects
-- **Retry Storm** - Too many retries can end up doing more harm than good
 
 ## Testing system resilience
 
@@ -90,7 +90,7 @@ It is good to understand how much failure a system can tolerate and still operat
 
 [Chaos Engineering](https://principlesofchaos.org/) is the practice of running experiments on a system to observe how it reacts.
 
-This can reduce on-call burden not only by giving higher confidence in the system but can serve as on-call training. Engineers become familiar with the observability tools and are engaged and focused on resilience.
+This can reduce the on-call burden not only by giving higher confidence in the system but can serve as on-call training. Engineers become familiar with the observability tools and are engaged and focused on resilience.
 
 - Start with one-off experiments or game days
 - Choose experiments based on real-world events and incidents
@@ -105,7 +105,7 @@ Though loosely coupled, teams should be highly aligned. Visibility between teams
 
 ## Conclusion
 
-Distributed systems are part of life working on modern software and it's important we understand the compromises we make with each decision - whether it's added complexity and maintenance, degraded experience or just more expensive there will always be a cost to added resilience.
+Distributed systems are part of life working on modern software and it's important we understand the compromises we make with each decision - whether it's added complexity and maintenance, degraded experience, or just more expensive there will always be a cost to added resilience.
 
 - 🛡 Protect resources where possible
 - 💡 Be aware of the trade-offs introduced by a pattern
