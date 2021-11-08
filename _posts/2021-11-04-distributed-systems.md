@@ -46,33 +46,32 @@ Is it acceptable to degrade certain functionality if it means other, potentially
 Isolated functionality can be switched off using bulkheads and circuit breakers, this protects downstream resources and also allows the application to continue processing other potentially successful operations.
 Traffic can be intermittently let through to test if service can be resumed.
 
-## Other provisions
+## Prevention
 
 There are some patterns we can use in an attempt to make it less likely to encounter a failure however, we must be aware of their trade-offs.
 
 ### Scaling
 
-We can add more resources to be able to handle more requests.
-
-However, we must be cautious of overwhelming downstream resources.
+We can add more resources to be able to handle more requests, this can be increased and decreased as the load changes and idle instances can be added for redundancy.
+We must be cautious of overwhelming downstream resources.
 
 ### Cache
 
 If we know what queries we expect to receive, we can serve the results from a cache.
+This can be populated the first time it is read, or by precalculating results when data is updated.
 
 The trade-off here is that the user will not always see the latest data.
 
 ### Events
 
-Reduce coupling between systems by using events for notifications.
+Increase resilience by capturing events in queues and consuming at a steady rate. 
+This rate can be increased by scaling the component, ensuring the rate isn't so high we start overwhelming downstream resources.
 
-This is not a good pattern if the caller needs to know that the message has been processed before returning.
+This isn't suitable if the caller needs to know that the message has been processed before returning.
 
 ## Testing system resilience
 
 It is good to understand how much failure a system can tolerate and still operate within acceptable boundaries.
-
-It is important to have good observability in place to be able to define the expected behaviour of our system under normal conditions, for example, "We expect 99% availability while processing 200 orders per second".
 
 ### Chaos Engineering
 
