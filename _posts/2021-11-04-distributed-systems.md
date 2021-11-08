@@ -36,14 +36,14 @@ So what patterns can we use to add resilience into our system?
 Adding more resources to be able to handle more requests.
 This can be _horizontal_ by adding more similar resources, or _veritical_ by increasing the size of existing resources.
 
-😬 Must be cautious of overwhelming downstream resources.
+Must be cautious of overwhelming downstream resources.
 
 ### Caching
 
 Increase availability and resilience by [caching](https://aws.amazon.com/caching/) data that is likely to be accessed. Either after the first time it is read or by precalculating results when data is updated.
 If many queries now access the cache instead of getting the latest data this can greatly reduce load on the rest of the system.
 
-😬 The trade off here is that the user will not always see the most up to date data.
+The trade off here is that the user will not always see the most up to date data.
 
 ### Events and Queues
 
@@ -52,7 +52,7 @@ If many queries now access the cache instead of getting the latest data this can
 Events can be captured on queues so the consuming component can process messages at a steady rate.
 This rate can be increased by scaling the component, ensuring the rate isn't so high we start overwhelming downstream resources such as databases.
 
-😬 This pattern introduces some complications to be aware of
+This pattern introduces some complications to be aware of
 - **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must add a request identifier and de-duplicate
 - **Ordering** - Out of order messages can apply updates incorrectly, this can potentially be dealt with using timestamps or versions
 
@@ -78,6 +78,7 @@ This protects downstream resources and also allows the application to continue p
 If a call is taking too long in a distributed system, it could be because there is a transient fault and sometimes it is better to cancel the call and retry.
 "Too long" could be different for each operation and we can use our observability tools to guide us here.
 
+Be aware of
 - **Duplicates** - In case the operation failed after it was received, we can only retry if there will be no side effects
 - **Retry Storm** - Too many retries can end up doing more harm than good
 
@@ -104,11 +105,10 @@ Though loosely coupled, teams should be highly aligned. Visibility between teams
 
 ## Conclusion
 
-Distributed systems are part of life working on modern software and it's important we understand the trade offs we make with each decision.
+Distributed systems are part of life working on modern software and it's important we understand the compromises we make with each decision - whether it's added complexity and maintenance, degraded experience or just more expensive there will always be a cost to added resilience.
 
-- 🛡 Protect resources using caching and queues
-- ⭐️ Isolate functionality
-- 📈 Allow horizontal scaling where possible, being weary of downstream resources
+- 🛡 Protect resources where possible
+- 💡 Be aware of the trade-offs introduced by a pattern
 - 🕵️‍♀️ Ensure the system is observable
 - 🧪 Test knowns and experiment for unknowns
 - 🤓 Learn, improve, repeat
