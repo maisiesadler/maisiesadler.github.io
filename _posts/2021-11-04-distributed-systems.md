@@ -62,12 +62,6 @@ If we know what queries we expect to receive, we can serve the results from a ca
 
 The trade-off here is that the user will not always see the latest data.
 
-### Isolation
-
-If critical operations are isolated then prevent them from being affected by failure in other parts of the system.
-
-Isolation also allows teams to independently maintain different system capabilities.
-
 ### Events
 
 Reduce coupling between systems by using events for notifications.
