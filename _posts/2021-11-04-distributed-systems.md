@@ -9,7 +9,7 @@ This article outlines some patterns and practices for adding resilience to compl
 First a few defintions,
 
 - **Resilience** - Resilience is the ability to maintain acceptable service levels during a system failure
-- **Complex Systems** - A system is complex if there are enough moving parts that an individual cannot hold the model in their head, the outputs are unpredictable given the inputs
+- **Complex Systems** - A system is complex if there are enough moving parts that an individual cannot hold the model in their head, the outputs can be unpredictable
 - **Distributed Systems** - A system is distributed if there are multiple components spread over multiple hosts
 
 Modern systems are increasingly complex and distributed.
@@ -48,13 +48,10 @@ Must be cautious of overwhelming downstream resources.
 
 ### Caching
 
-Is it ok to return slightly stale data if it can be accessed much more quickly?
+Increase availability and resilience by [caching](https://aws.amazon.com/caching/) the result to queries that might be accessed again or precalculating the result of something that will likely be queried later.
+The trade off here is that the user will not always see the most up to date data.
 
-Can we prempt what the user will request and cache the value ahead of time?
-
-If so, [caching](https://aws.amazon.com/caching/) the data could be a good option to increase availability and reduce load on the rest of the system.
-
-The system should eventually update and be correct and this type of system is known as eventually consistent.
+If many queries now access the cache instead of getting the latest data this can greatly reduce load on the rest of the system.
 
 ### Events and Queues
 
@@ -68,8 +65,6 @@ This pattern introduces some complications to be aware of
 - **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must add a request identifier and de-duplicate
 - **Ordering** - An earlier message could undo the work of a more recent message, this can be configured in a queue, or potentially dealt with using timestamps or versions
 
-Event driven architecture is loosely coupled, the event doesn't know about the consequences it can cause.
-
 ### Isolation
 
 Critical operations can be isolated into separate components and their resources can be isolated, this prevents them from being affected by failure in other parts of the system.
@@ -77,8 +72,6 @@ Critical operations can be isolated into separate components and their resources
 Isolation also allows teams to independently maintain different system capabilities.
 
 ### Degrading functionality
-
-Is it sufficient to return a partial response?
 
 Can we turn off parts of the system to protect other parts?
 
@@ -91,9 +84,9 @@ This protects downstream resources and also allows the application to continue p
 
 #### Timeouts and Retries
 
-If a call is taking a long time in a distributed system, it could be because it is connected to a bad or overwhelmed instance and sometimes it is better to cancel the call and retry.
+If a call is taking too long in a distributed system, it could be because there is a transient fault with the network or a component downstream and sometimes it is better to cancel the call and retry.
 
-"A long time" could be different for each operation and we can use our observability tools to guide us here.
+"Too long" could be different for each operation and we can use our observability tools to guide us here.
 
 Similar to events, if the operation is not idempotent then the request can only be retried if provisions have been put in place to deal with duplicates.
 
@@ -101,12 +94,9 @@ Similar to events, if the operation is not idempotent then the request can only 
 
 It is good to understand how much failure a system can tolerate and still operate within acceptable boundaries.
 
-By accepting that the system will fail we can experiment and learn how it will react under certain conditions.
-
 ### Chaos Engineering
 
 [Chaos Engineering](https://principlesofchaos.org/) is a practice of running experiments on a system to observe how it reacts.
-This gives increased understanding in the resilience of the system as it allows you to monitor system failure in a controlled setting.
 
 This can reduce on call burden not only by giving the engineers higher confidence in the system, but can serve as on call training. Engineers become familiar with the observability tools and are engaged and focused on resilience.
 
