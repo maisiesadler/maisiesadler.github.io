@@ -5,25 +5,25 @@ tags: distributed-systems resilience design architecture
 ---
 
 Modern systems are increasingly complex and distributed.
-Every engineer must understand the trade-offs of every decisions and keep observability and resilience in mind.
+Every engineer must understand the trade-offs of every decision and keep observability and resilience in mind.
 
 This article outlines some patterns and practices for adding resilience to complex, distributed systems.
 
-First a few defintions,
+First a few definitions,
 
 - **Resilience** - The ability to maintain acceptable service levels during a system failure
 - **Complex Systems** - A system with enough parts that an individual cannot hold the model in their head, the outputs can be unpredictable
 - **Distributed Systems** - A system is with multiple components spread over multiple hosts
 
-Understanding the requirements of the system is important as it will help to guide our decisions for which behaviours are essential and which can be comprimised.
+Understanding the requirements of the system is important as it will help to guide our decisions for which behaviours are essential and which can be compromised.
 
-The [fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistributedComputing) tell us that we cannot rely on the network to be reliable or secure. We must make a decision for each operation when we encounter a failure; wait, retry or cancel?
+The [fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistributedComputing) tell us that we cannot rely on the network to be reliable or secure. We must decide for each operation when we encounter a failure; wait, retry or cancel?
 
 ## Observability
 
 Observability is key to be able to navigate operations through a complex, distributed system. It gives us operational visibility and helps us understand system bottlenecks.
 
-We can define expected behaviour of our system under normal conditions, for example "We expect 99% availability while processing 200 orders per second".
+We can define the expected behaviour of our system under normal conditions, for example, "We expect 99% availability while processing 200 orders per second".
 
 When we make changes to the system we can monitor metrics such as latency and error rate to ensure we're not unintentionally degrading the user experience.
 
@@ -34,20 +34,20 @@ So what patterns can we use to add resilience into our system?
 ### Scaling
 
 Adding more resources to be able to handle more requests.
-This can be _horizontal_ by adding more similar resources, or _veritical_ by increasing the size of existing resources.
+This can be _horizontal_ by adding more similar resources, or _vertical_ by increasing the size of existing resources.
 
 Must be cautious of overwhelming downstream resources.
 
 ### Caching
 
-Increase availability and resilience by [caching](https://aws.amazon.com/caching/) data that is likely to be accessed. Either after the first time it is read or by precalculating results when data is updated.
+Increase availability and resilience by [caching](https://aws.amazon.com/caching/) data that is likely to be accessed. Either after the first time it is read, or by precalculating results when data is updated.
 If many queries now access the cache instead of getting the latest data this can greatly reduce load on the rest of the system.
 
-The trade off here is that the user will not always see the most up to date data.
+The trade-off here is that the user will not always see the latest data.
 
 ### Events and Queues
 
-[Event driven architecture](https://martinfowler.com/articles/201701-event-driven.html) is a loosely coupled approach that can increase system resilience by allowing an operation to resume after a component has failed.
+[Event-driven architecture](https://martinfowler.com/articles/201701-event-driven.html) is a loosely coupled approach that can increase system resilience by allowing an operation to resume after a component has failed.
 
 Events can be captured on queues so the consuming component can process messages at a steady rate.
 This rate can be increased by scaling the component, ensuring the rate isn't so high we start overwhelming downstream resources such as databases.
@@ -88,20 +88,20 @@ It is good to understand how much failure a system can tolerate and still operat
 
 ### Chaos Engineering
 
-[Chaos Engineering](https://principlesofchaos.org/) is a practice of running experiments on a system to observe how it reacts.
+[Chaos Engineering](https://principlesofchaos.org/) is the practice of running experiments on a system to observe how it reacts.
 
-This can reduce on call burden not only by giving higher confidence in the system, but can serve as on call training. Engineers become familiar with the observability tools and are engaged and focused on resilience.
+This can reduce on-call burden not only by giving higher confidence in the system but can serve as on-call training. Engineers become familiar with the observability tools and are engaged and focused on resilience.
 
 - Start with one-off experiments or game days
-- Choose experiments based on real world events and incidents
+- Choose experiments based on real-world events and incidents
 - Once confident, run the experiment in production
 - Have a rollback plan in place and revert once you have learned something
 
 ## System design and team structure
 
-[Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of system will reflect the organization that built it. It follows that loosely coupled systems are created by loosely coupled teams.
+[Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it. It follows that loosely coupled systems are created by loosely coupled teams.
 
-Though loosely coupled, teams should be highly aligned. Visibility between teams helps to form shared values, principles and practices.
+Though loosely coupled, teams should be highly aligned. Visibility between teams helps to form shared values, principles, and practices.
 
 ## Conclusion
 
