@@ -68,17 +68,11 @@ Reduce coupling between systems by using events for notifications.
 
 This is not a good pattern if the caller needs to know that the message has been processed before returning.
 
-## Observability
-
-Observability is key to be able to navigate operations through a complex, distributed system. It gives us operational visibility and helps us understand system bottlenecks.
-
-We can define the expected behaviour of our system under normal conditions, for example, "We expect 99% availability while processing 200 orders per second".
-
-When we make changes to the system we can monitor metrics such as latency and error rate to ensure we're not unintentionally degrading the user experience.
-
 ## Testing system resilience
 
 It is good to understand how much failure a system can tolerate and still operate within acceptable boundaries.
+
+It is important to have good observability in place to be able to define the expected behaviour of our system under normal conditions, for example, "We expect 99% availability while processing 200 orders per second".
 
 ### Chaos Engineering
 
@@ -90,12 +84,6 @@ This can reduce the on-call burden not only by giving higher confidence in the s
 - Choose experiments based on real-world events and incidents
 - Once confident, run the experiment in production
 - Have a rollback plan in place and revert once you have learned something
-
-## System design and team structure
-
-[Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it. It follows that loosely coupled systems are created by loosely coupled teams.
-
-Though loosely coupled, teams should be highly aligned. Visibility between teams helps to form shared values, principles, and practices.
 
 ## Conclusion
 
