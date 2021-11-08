@@ -8,20 +8,12 @@ This article outlines some patterns and practices for adding resilience to compl
 
 First a few defintions,
 
-- **Resilience** - Resilience is the ability to maintain acceptable service levels during a system failure
-- **Complex Systems** - A system is complex if there are enough moving parts that an individual cannot hold the model in their head, the outputs can be unpredictable
-- **Distributed Systems** - A system is distributed if there are multiple components spread over multiple hosts
+- **Resilience** - The ability to maintain acceptable service levels during a system failure
+- **Complex Systems** - A system with enough parts that an individual cannot hold the model in their head, the outputs can be unpredictable
+- **Distributed Systems** - A system is with multiple components spread over multiple hosts
 
 Modern systems are increasingly complex and distributed.
-Every engineer must understand the trade offs of every decisions and keep observability and resilience in mind.
-
-Desirable properties of distributed systems
-
-- **Fault tolerant** - Can recover from component failures without performing incorrect actions
-- **Highly available** - Can restore operations, allowing it to resume service after a component has failed
-- **Consistent** - Can coordinate actions by multiple components in the presence of concurrency and failure
-- **Transparent** - The user is unaware that processes and components are distributed across multiple computers
-- **Cost efficient** - We must keep spending in check to keep the product adding value
+Every engineer must understand the trade-offs of every decisions and keep observability and resilience in mind.
 
 Understanding the requirements of the system is important as it will help to guide our decisions for which behaviours are essential and which can be comprimised.
 
@@ -55,10 +47,9 @@ If many queries now access the cache instead of getting the latest data this can
 
 ### Events and Queues
 
-Events can be used to durably capture a request for an operation.
-This increases availability by allowing an operation to resume after a component has failed.
+[Event driven architecture](https://martinfowler.com/articles/201701-event-driven.html) is a loosely coupled approach that can increase system resilience by allowing an operation to resume after a component has failed.
 
-A component consuming messages from a queue can process messages at a steady rate.
+Events can be captured on queues so the consuming component can process messages at a steady rate.
 This rate can be increased by scaling the component, ensuring the rate isn't so high we start overwhelming downstream resources such as databases.
 
 This pattern introduces some complications to be aware of
@@ -115,8 +106,9 @@ Though loosely coupled, teams should be highly aligned. Visibility between teams
 
 Distributed systems are part of life working on modern software and it's important we understand the trade offs we make with each decision.
 
-- 🤔 Review if splitting up a component is the right thing to do
+- 🛡 Protect resources using caching and queues
+- ⭐️ Isolate functionality
+- 📈 Allow horizontal scaling where possible, being weary of downstream resources
 - 🕵️‍♀️ Ensure the system is observable
-- 📝 Hypthesise about the behaviour of your system under failure
 - 🧪 Test knowns and experiment for unknowns
 - 🤓 Learn, improve, repeat
