@@ -21,7 +21,7 @@ The [fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistr
 
 ## Observability
 
-Observability is key to be able to navigate operations through a complex distributed system. It gives us operational visibility and helps us understand system bottlenecks.
+Observability is key to be able to navigate operations through a complex, distributed system. It gives us operational visibility and helps us understand system bottlenecks.
 
 We can define expected behaviour of our system under normal conditions, for example "We expect 99% availability while processing 200 orders per second".
 
@@ -36,14 +36,14 @@ So what patterns can we use to add resilience into our system?
 Adding more resources to be able to handle more requests.
 This can be _horizontal_ by adding more similar resources, or _veritical_ by increasing the size of existing resources.
 
-Must be cautious of overwhelming downstream resources.
+⚠ Must be cautious of overwhelming downstream resources.
 
 ### Caching
 
 Increase availability and resilience by [caching](https://aws.amazon.com/caching/) data that is likely to be accessed. Either after the first time it is read or by precalculating results when data is updated.
-The trade off here is that the user will not always see the most up to date data.
-
 If many queries now access the cache instead of getting the latest data this can greatly reduce load on the rest of the system.
+
+⚠ The trade off here is that the user will not always see the most up to date data.
 
 ### Events and Queues
 
@@ -52,7 +52,7 @@ If many queries now access the cache instead of getting the latest data this can
 Events can be captured on queues so the consuming component can process messages at a steady rate.
 This rate can be increased by scaling the component, ensuring the rate isn't so high we start overwhelming downstream resources such as databases.
 
-This pattern introduces some complications to be aware of
+⚠ This pattern introduces some complications to be aware of
 - **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must add a request identifier and de-duplicate
 - **Ordering** - An earlier message could undo the work of a more recent message, this can be configured in a queue, or potentially dealt with using timestamps or versions
 
