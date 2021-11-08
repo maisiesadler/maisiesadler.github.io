@@ -48,7 +48,7 @@ Must be cautious of overwhelming downstream resources.
 
 ### Caching
 
-Increase availability and resilience by [caching](https://aws.amazon.com/caching/) the result to queries that might be accessed again or precalculating the result of something that will likely be queried later.
+Increase availability and resilience by [caching](https://aws.amazon.com/caching/) data that is likely to be accessed. Either after the first time it is read or by precalculating results when data is updated.
 The trade off here is that the user will not always see the most up to date data.
 
 If many queries now access the cache instead of getting the latest data this can greatly reduce load on the rest of the system.
@@ -84,11 +84,11 @@ This protects downstream resources and also allows the application to continue p
 
 #### Timeouts and Retries
 
-If a call is taking too long in a distributed system, it could be because there is a transient fault with the network or a component downstream and sometimes it is better to cancel the call and retry.
-
+If a call is taking too long in a distributed system, it could be because there is a transient fault and sometimes it is better to cancel the call and retry.
 "Too long" could be different for each operation and we can use our observability tools to guide us here.
 
 Similar to events, if the operation is not idempotent then the request can only be retried if provisions have been put in place to deal with duplicates.
+We should also be weary of using the same interval for retries as this can cause traffic spikes as the number of retrying requests increased.
 
 ## Testing system resilience
 
@@ -98,22 +98,14 @@ It is good to understand how much failure a system can tolerate and still operat
 
 [Chaos Engineering](https://principlesofchaos.org/) is a practice of running experiments on a system to observe how it reacts.
 
-This can reduce on call burden not only by giving the engineers higher confidence in the system, but can serve as on call training. Engineers become familiar with the observability tools and are engaged and focused on resilience.
+This can reduce on call burden not only by giving higher confidence in the system, but can serve as on call training. Engineers become familiar with the observability tools and are engaged and focused on resilience.
 
 - Start with one-off experiments or game days
 - Choose experiments based on real world events and incidents
 - Once confident, run the experiment in production
 - Have a rollback plan in place and revert once you have learned something
 
-## Other considerations
-
-Although the system is complex we can do our best to minimise accidental complexity.
-
-- Defining domain boundaries lowers cognitive complexity for engineers
-- Ensuring the whole team understand _why_ helps them to make the right decision and keep the code clean
-- Test first approach to ensure we only write the code we need
-
-### System design and team structure
+## System design and team structure
 
 [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of system will reflect the organization that built it. It follows that loosely coupled systems are created by loosely coupled teams.
 
