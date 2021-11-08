@@ -5,7 +5,7 @@ tags: distributed-systems resilience design architecture
 ---
 
 Modern systems are increasingly complex and distributed.
-Every engineer must understand the trade-offs of every decision and keep observability and resilience in mind.
+Every engineer must understand the trade-offs of their decisions and keep availability and resilience in mind.
 
 This article outlines some patterns and practices for adding resilience to complex, distributed systems.
 
@@ -34,7 +34,7 @@ This rate can be increased by scaling the component, ensuring the rate isn't so 
 
 In a distributed system it is possible that a process is hanging due to a transient failure and that retrying the call could be successful. This can be done in memory or by re-queuing a message.
 
-This can introduce some complications to be aware of
+Some complications to be aware of
 - **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must add a request identifier and de-duplicate
 - **Ordering** - Out of order messages can apply updates incorrectly, this can potentially be dealt with using timestamps or versions
 - **Retry Storm** - Too many retries can end up doing more harm than good
@@ -61,13 +61,6 @@ If we know what queries we expect to receive, we can serve the results from a ca
 This can be populated the first time it is read, or by precalculating results when data is updated.
 
 The trade-off here is that the user will not always see the latest data.
-
-### Events
-
-Increase resilience by capturing events in queues and consuming at a steady rate. 
-This rate can be increased by scaling the component, ensuring the rate isn't so high we start overwhelming downstream resources.
-
-This isn't suitable if the caller needs to know that the message has been processed before returning.
 
 ## Testing system resilience
 
