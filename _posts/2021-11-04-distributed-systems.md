@@ -58,7 +58,7 @@ We must be cautious of overwhelming downstream resources.
 ### Cache
 
 If we know what queries we expect to receive, we can serve the results from a cache.
-This can be populated the first time it is read, or by precalculating results when data is updated.
+This can be populated on read, or by precalculating results when data is updated.
 
 The trade-off here is that the user will not always see the latest data.
 
