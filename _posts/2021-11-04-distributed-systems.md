@@ -23,12 +23,12 @@ The [fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistr
 
 How likely is it that the result is just about to be returned?
 
-If a network connection is open for an extended period not only does it have more time to fail but it is consuming resources and could block potentially successful calls.
+Network connections that are left open for extended periods not only have more time to fail but they consume resources that could be used for successful calls.
 
 Use observability to guide what is an acceptable time to wait and use timeouts to cancel after it is unlikely to return successfully.
 
-Another option for waiting for available resources is to use events and queues, messages can be consumed at a steady rate.
-This rate can be increased by scaling the component, ensuring the rate isn't so high we start overwhelming downstream resources such as databases.
+Events and queues can be used to wait for available resources and messages can be consumed at a steady rate.
+This rate can be increased by scaling the processing component, ensuring the rate isn't so high we start overwhelming downstream resources.
 
 ## Retry
 
@@ -43,7 +43,7 @@ Some complications to be aware of
 
 Is it acceptable to degrade certain functionality if it means other, potentially more critical, operations can continue?
 
-Isolated functionality can be switched off using bulkheads and circuit breakers, this protects downstream resources and also allows the application to continue processing other potentially successful operations.
+Functionality can be automatically switched off under certain failure conditions using circuit breakers, this protects downstream resources and also allows the application to continue processing other potentially successful operations.
 Traffic can be intermittently let through to test if service can be resumed.
 
 ## Prevention
