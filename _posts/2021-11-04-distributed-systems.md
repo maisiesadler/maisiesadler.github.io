@@ -48,11 +48,12 @@ Traffic can be intermittently let through to test if service can be resumed.
 
 ## Prevention
 
-There are some patterns we can use in an attempt to make it less likely to encounter a failure however, we must be aware of their trade-offs.
+There are some patterns we can use in an attempt to make it less likely to encounter a failure.
 
 ### Scaling
 
 We can add more resources to be able to handle more requests, this can be increased and decreased as the load changes and idle instances can be added for redundancy.
+
 We must be cautious of overwhelming downstream resources.
 
 ### Cache
@@ -60,7 +61,7 @@ We must be cautious of overwhelming downstream resources.
 If we know what queries we expect to receive, we can serve the results from a cache.
 This can be populated on read, or by precalculating results when data is updated.
 
-The trade-off here is that the user will not always see the latest data.
+However the user will not always see the latest data.
 
 ## Testing system resilience
 
