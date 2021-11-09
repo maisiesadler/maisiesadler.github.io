@@ -21,7 +21,7 @@ This is a particularly good choice if the operation is an action to be processed
 
 In a distributed system it is possible that a process is hanging due to a transient failure and that retrying the call could be successful.
 
-Messages can be duplicated or out of order meaning we might need to add an ordered identifier to help us process correctly.
+Depending on the operation, we might need to add provisions to handle duplicated or out-of-order messages.
 If a system is failing and cancels all in-progress calls and all are retried at the same time this will cause extra load on an already struggling system.
 
 ## Cancel
