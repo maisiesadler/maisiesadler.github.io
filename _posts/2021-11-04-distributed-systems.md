@@ -43,9 +43,6 @@ If a network connection is open for an extended period not only does it have mor
 
 Use observability to guide what is an acceptable time to wait and use timeouts to cancel after it is unlikely to return successfully.
 
-Another option for waiting for available resources is to use events and queues, messages can be consumed at a steady rate.
-This rate can be increased by scaling the component, ensuring the rate isn't so high we start overwhelming downstream resources such as databases.
-
 ### Retry
 
 In a distributed system it is possible that a process is hanging due to a transient failure and that retrying the call could be successful. This can be done in memory or by re-queuing a message.
@@ -166,13 +163,6 @@ Governed by feedback loops, not linear equations.
 ### Chaos Engineering
 
 Chaos Engineering is the practice of running experiments on a system to observe how it reacts.
-This builds confidence in the resilience of the system as it allows you to monitor system failure in a controlled setting.
-
-1. Define steady state of the system
-2. Build hypothesis around steady-state behaviour under failure conditions, for example, "We expect the system to maintain 99.9% availability while handling 200 requests per second while 20% of nodes are failing"
-3. Run an experiment to test the theory
-4. Verify - did something unexpected happen?
-5. Improve system using learnings from experiment, redefine steady-state and go again!
 
 Start with one-off experiments or game days. When the experiment is well defined it can be automated and run continuously.
 
@@ -180,16 +170,7 @@ Start with one-off experiments or game days. When the experiment is well defined
 - Once confident, run the experiment in production
 - Have a rollback plan in place and revert once you have learned something
 
-Engineers get a sense of the chaos already in the system, 
-
-### Benefits
-
-- Higher confidence in the system
-- Increased understanding of resilience of system
-- Serves as on-call training and reduces on-call burden
-- Engineers familiar with observability tools
-  - Engaged and focused on resilience
-  - Have these tools in mind when implementing new features
+This can reduce the on-call burden not only by giving higher confidence in the system but can serve as on-call training. Engineers get a sense of the chaos already in the system, become familiar with the observability tools and are engaged and focused on resilience.
 
 ## Conclusion
 
