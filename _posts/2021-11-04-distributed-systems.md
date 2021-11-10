@@ -104,48 +104,49 @@ Similar to events, if the operation is not idempotent then the request can only 
 
 ## Tackling complexity
 
-Complexity is difficult to model due to dependencies, competitions, relationships, or other types of interactions between their parts or between a given system and its environment.
+Although complex systems can be unpredictable, they share some common traits that can help us model how they might behave.
 
-Complexity appears in many different types of systems and does not comply with traditional methods.
+Complexity theory gives us a set of tools to understand behaviours and what levers we might have to ... . 
+Levers that we can pull for certain behaviours
+
+Complex systems are made up of individual components interacting with each other, as a system scales it becomes more complex.
+The dependencies, relationships and interactions of these componenets make them hard to model. 
+
+The methods we use to add resilience add more complexity but this isn't necessarily a bad thing.
+Though we let the number of states and interdependencies increase, we have a level left for us to pull - reversibility.
+If we introduce a behaviour into the system that wasn't expected then we can revert the change, learn and try again.
 
 Theory emerging in many domains,
-Tackled by many different disicplines into a core set of common features known as complexity theory.
+Tackled by many different diciplines into a core set of common features known as complexity theory.
 
 Theoretical framework for modelling complex systems in a variety of domains.
+
+- **Emergence** - Isolated component behaviour leads to non-aparent system behaviour
+- **Non-linearity** - Given the same input, a system response might be different given different state
+- **Adaptive** - Systems regulate themselves with adaptive agents cooperation and competition
+
+Although seemingly random the outputs are governed by the inputs, just unpredictable.
+
+Chaos theory is the theory that chaos systems, though unpredictable, are not random and that there are patterns that govern their behaviour.
+Governed by feedback loops not linear equations.
+
+Prediction is difficult even though system is deterministic, not random.
+
+### Irreversibility
+
+Effects of decisions can't be predicted, it is expensive if decision can't be reversed.
+
+Most available lever to control complexity in software.
+
+Frequent pushes, using observabilty, 
+Letting data inform if a feature has been good or no
+
+### System design and team structure
 
 Our software solution is a complex system, and our organisation is a complex system. [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it and so it is interesting to consider both systems when modelling complexity.
 
 [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it.
 For this reason it is interesting to consider both the software system and the organisation when thinking about complexity in our system.
-
-### Self-Organisation
-
-Tools to understand process of emergence in which global patterns form out of local interactions.
-
-Complex systems composed of many small parts without centralised control. Synchronise behaviour with self-organisation.
-
-### Non-linear Systems
-
-Chaos theory. Counter intuitive theory - modern science based on linear systems that reach an equilibrium, linear systems theory can work as an approximation.
-Governed by feedback loops not linear equations. Linear thinking is wrong tool.
-
-Prediction is difficult even though system is deterministic, not random.
-
-### Complex Adaptive Systems
-
-Understand complex adaptive systems in terms of interaction between adaptive agents - cooperation and competition and the dynamics of evolution.
-
-Classical example of Complex Systems. Consist of many parts acting and reacting to each others behaviour. Highly dynamic and developed through evolutionary-type process.
-Adaptation - control systems, how systems regulate themselves
-- cooperation and competition as nodes interact and persue their goals collectively
-- game theory
-Expand adaptation and generalise to whole population, series of lifecycles --> evolution
-
-Evolutionary game theory, replicator equations, fitness landscape and genetic algorithms.
-
-To add resilience we need to add complexity. 
-
-### System design and team structure
 
 Self-organisation model tells us that global patterns form out of local interactions.
 
@@ -161,15 +162,6 @@ Imagine system we are trying to build and start with team structure
 - Test first approach to ensure we only write the code we need
 
 [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it. It follows that loosely coupled systems are created by loosely coupled teams.
-
-### Irreversibility
-
-Effects of decisions can't be predicted, it is expensive if decision can't be reversed.
-
-Most available lever to control complexity in software.
-
-Frequent pushes, using observabilty, 
-Letting data inform if a feature has been good or no
 
 ## Testing system resilience
 
