@@ -27,7 +27,7 @@ The [fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistr
 
 ## Observability
 
-Observability is key to be able to navigate operations through a complex distributed system. It gives us operational visibility and helps us understand system bottlenecks.
+To be able to navigate operations through a complex distributed system observability is key as it gives us operational visibility and helps us understand system bottlenecks.
 
 We can define the expected behaviour of our system under normal conditions, for example, "We expect 99% availability while processing 200 orders per second".
 
@@ -110,50 +110,50 @@ Complexity theory gives us a set of tools to understand behaviours and what leve
 Levers that we can pull for certain behaviours
 
 Complex systems are made up of individual components interacting with each other, as a system scales it becomes more complex.
-The dependencies, relationships and interactions of these componenets make them hard to model. 
+The dependencies, relationships, and interactions of these components make them hard to model. 
 
 The methods we use to add resilience add more complexity but this isn't necessarily a bad thing.
 Though we let the number of states and interdependencies increase, we have a level left for us to pull - reversibility.
 If we introduce a behaviour into the system that wasn't expected then we can revert the change, learn and try again.
 
 Theory emerging in many domains,
-Tackled by many different diciplines into a core set of common features known as complexity theory.
+Tackled by many different disciplines into a core set of common features known as complexity theory.
 
-Theoretical framework for modelling complex systems in a variety of domains.
+Theoretical framework for modeling complex systems in a variety of domains.
 
-- **Emergence** - Isolated component behaviour leads to non-aparent system behaviour
+- **Emergence** - Isolated component behaviour leads to non-apparent system behaviour
 - **Non-linearity** - Given the same input, a system response might be different given different state
 - **Adaptive** - Systems regulate themselves with adaptive agents cooperation and competition
 
 Although seemingly random the outputs are governed by the inputs, just unpredictable.
 
 Chaos theory is the theory that chaos systems, though unpredictable, are not random and that there are patterns that govern their behaviour.
-Governed by feedback loops not linear equations.
+Governed by feedback loops, not linear equations.
 
 Prediction is difficult even though system is deterministic, not random.
 
 ### Irreversibility
 
-Effects of decisions can't be predicted, it is expensive if decision can't be reversed.
+If the effects of a decision can't be predicted, then it is expensive if that decision can't be reversed.
 
 Most available lever to control complexity in software.
 
-Frequent pushes, using observabilty, 
+Frequent pushes, using observability, 
 Letting data inform if a feature has been good or no
 
 ### System design and team structure
 
-Our software solution is a complex system, and our organisation is a complex system. [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it and so it is interesting to consider both systems when modelling complexity.
+Our software solution is a complex system, and our organisation is a complex system. [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it and so it is interesting to consider both systems when modeling complexity.
 
 [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it.
-For this reason it is interesting to consider both the software system and the organisation when thinking about complexity in our system.
+For this reason, it is interesting to consider both the software system and the organisation when thinking about complexity in our system.
 
 Self-organisation model tells us that global patterns form out of local interactions.
 
-Adaptive theory tells us that systems will regulate themselves using cooperation and competition to persue their goals.
+Adaptive theory tells us that systems will regulate themselves using cooperation and competition to pursue their goals.
 - How a learner adapts and reacts to stimuli
 
-Imagine system we are trying to build and start with team structure
+Imagine the system we are trying to build and start with team structure
 
 - Keep teams aligned with shared values, principles, and practices
 - Focus on quality
@@ -175,14 +175,14 @@ Chaos Engineering is the practice of running experiments on a system to observe 
 This builds confidence in the resilience of the system as it allows you to monitor system failure in a controlled setting.
 
 1. Define steady state of the system
-2. Build hypothesis around steady-state behaviour under failure conditions, for example "We expect the system to maintain 99.9% availability while handling 200 requests per second while 20% of nodes are failing"
+2. Build hypothesis around steady-state behaviour under failure conditions, for example, "We expect the system to maintain 99.9% availability while handling 200 requests per second while 20% of nodes are failing"
 3. Run an experiment to test the theory
 4. Verify - did something unexpected happen?
-5. Improve system using learnings from experiment, redefine steady state and go again!
+5. Improve system using learnings from experiment, redefine steady-state and go again!
 
 Start with one-off experiments or game days. When the experiment is well defined it can be automated and run continuously.
 
-- Choose experiments based on real world events and incidents
+- Choose experiments based on real-world events and incidents
 - Once confident, run the experiment in production
 - Have a rollback plan in place and revert once you have learned something
 
