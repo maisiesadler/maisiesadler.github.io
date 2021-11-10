@@ -10,7 +10,7 @@ This article outlines some patterns and practices for adding resilience to compl
 First a few definitions,
 
 - **Resilience** - Resilience is the ability to maintain acceptable service levels during a system failure
-- **Complex Systems** - A system is complex if there are enough moving parts that an individual cannot hold the model in their head, the outputs are unpredictable given the inputs
+- **Complex Systems** - A system composed of many parts interacting with each other
 - **Distributed Systems** - A system is distributed if there are multiple components spread over multiple hosts
 
 Desirable properties of distributed systems
@@ -60,7 +60,7 @@ Events can be used to durably capture a request for an operation.
 This increases availability by allowing an operation to resume after a component has failed.
 
 A component consuming messages from a queue can process messages at a steady rate.
-This rate can be increased by scaling the component, ensuring the rate isn't so high we start overwhelming downstream resources such as databases.
+This rate can be increased by scaling the component, ensuring the rate isn't so high we start overwhelming downstream resources.
 
 This pattern introduces some complications to be aware of
 - **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must add a request identifier and de-duplicate
@@ -102,19 +102,74 @@ If a call is taking a long time in a distributed system, it could be because it 
 
 Similar to events, if the operation is not idempotent then the request can only be retried if provisions have been put in place to deal with duplicates.
 
-## Other considerations
+## Tackling complexity
 
-Although the system is complex we can do our best to minimise accidental complexity.
+Complexity is difficult to model due to dependencies, competitions, relationships, or other types of interactions between their parts or between a given system and its environment.
 
+Complexity appears in many different types of systems and does not comply with traditional methods.
+
+Theory emerging in many domains,
+Tackled by many different disicplines into a core set of common features known as complexity theory.
+
+Theoretical framework for modelling complex systems in a variety of domains.
+
+Our software solution is a complex system, and our organisation is a complex system. [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it and so it is interesting to consider both systems when modelling complexity.
+
+[Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it.
+For this reason it is interesting to consider both the software system and the organisation when thinking about complexity in our system.
+
+### Self-Organisation
+
+Tools to understand process of emergence in which global patterns form out of local interactions.
+
+Complex systems composed of many small parts without centralised control. Synchronise behaviour with self-organisation.
+
+### Non-linear Systems
+
+Chaos theory. Counter intuitive theory - modern science based on linear systems that reach an equilibrium, linear systems theory can work as an approximation.
+Governed by feedback loops not linear equations. Linear thinking is wrong tool.
+
+Prediction is difficult even though system is deterministic, not random.
+
+### Complex Adaptive Systems
+
+Understand complex adaptive systems in terms of interaction between adaptive agents - cooperation and competition and the dynamics of evolution.
+
+Classical example of Complex Systems. Consist of many parts acting and reacting to each others behaviour. Highly dynamic and developed through evolutionary-type process.
+Adaptation - control systems, how systems regulate themselves
+- cooperation and competition as nodes interact and persue their goals collectively
+- game theory
+Expand adaptation and generalise to whole population, series of lifecycles --> evolution
+
+Evolutionary game theory, replicator equations, fitness landscape and genetic algorithms.
+
+To add resilience we need to add complexity. 
+
+### System design and team structure
+
+Self-organisation model tells us that global patterns form out of local interactions.
+
+Adaptive theory tells us that systems will regulate themselves using cooperation and competition to persue their goals.
+- How a learner adapts and reacts to stimuli
+
+Imagine system we are trying to build and start with team structure
+
+- Keep teams aligned with shared values, principles, and practices
+- Focus on quality
 - Defining domain boundaries lowers the cognitive complexity for engineers
 - Ensuring the whole team understand _why_ helps them to make the right decision and keep the code clean
 - Test first approach to ensure we only write the code we need
 
-### System design and team structure
-
 [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it. It follows that loosely coupled systems are created by loosely coupled teams.
 
-Though loosely coupled, teams should be highly aligned. Visibility between teams helps to form shared values, principles, and practices.
+### Irreversibility
+
+Effects of decisions can't be predicted, it is expensive if decision can't be reversed.
+
+Most available lever to control complexity in software.
+
+Frequent pushes, using observabilty, 
+Letting data inform if a feature has been good or no
 
 ## Testing system resilience
 
@@ -124,7 +179,8 @@ By accepting that the system will fail we can experiment and learn how it will r
 
 ### Chaos Engineering
 
-Chaos Engineering is a practice where you run experiments on a system to observe how it reacts. This allows you to monitor system failure in a controlled setting instead of allowing it to happen out of business hours.
+Chaos Engineering is the practice of running experiments on a system to observe how it reacts.
+This builds confidence in the resilience of the system as it allows you to monitor system failure in a controlled setting.
 
 1. Define steady state of the system
 2. Build hypothesis around steady-state behaviour under failure conditions, for example "We expect the system to maintain 99.9% availability while handling 200 requests per second while 20% of nodes are failing"
@@ -138,6 +194,8 @@ Start with one-off experiments or game days. When the experiment is well defined
 - Once confident, run the experiment in production
 - Have a rollback plan in place and revert once you have learned something
 
+Engineers get a sense of the chaos already in the system, 
+
 ### Benefits
 
 - Higher confidence in the system
@@ -149,9 +207,10 @@ Start with one-off experiments or game days. When the experiment is well defined
 
 ## Conclusion
 
-- 🛡 Protect resources where possible
-- 💡 Be aware of the trade-offs introduced by a pattern
-- 🕵️‍♀️ Ensure the system is observable
-- 📝 Hypothesise about the behaviour of your system under failure
-- 🧪 Test knowns and experiment for unknowns
-- 🤓 Learn, improve, repeat
+Distributed systems are part of life working on modern software. We must understand the compromises we make with each decision - whether it's added complexity and maintenance, degraded experience, or just more expensive - there will always be a cost to added resilience.
+
+🛡 Protect resources where possible
+💡 Be aware of the trade-offs introduced by a pattern
+🕵️‍♀️ Ensure the system is observable
+🧪 Test knowns and experiment for unknowns
+🤓 Learn, improve, repeat
