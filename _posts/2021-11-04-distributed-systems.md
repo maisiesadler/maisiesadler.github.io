@@ -33,7 +33,7 @@ When we make changes to the system we can monitor metrics such as latency and er
 
 ## Encountering Failure
 
-The [fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistributedComputing) tell us that we cannot rely on the network to be reliable or secure. We must make a decision for each operation when we encounter a failure; wait, retry or cancel?
+The [fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistributedComputing) tell us that we cannot rely on the network to be reliable or secure. We must decide for each operation when we encounter a failure; wait, retry or cancel?
 
 ### Wait
 
@@ -72,6 +72,9 @@ Critical operations can be isolated into separate components and their resources
 
 Isolation also allows teams to independently maintain different system capabilities.
 
+- Fewer states within a domain
+- Lower complexity within boundary
+
 ### Scaling
 
 Adding more resources to be able to handle more requests.
@@ -105,48 +108,37 @@ Event-driven architecture is loosely coupled, the event doesn't know about the c
 
 ## Tackling complexity
 
-Although complex systems can be unpredictable, they share some common traits that can help us model how they might behave.
-
-Complexity theory gives us a set of tools to understand behaviours and what levers we might have to ... . 
-Levers that we can pull for certain behaviours
-
 Complex systems are made up of individual components interacting with each other, as a system scales it becomes more complex.
 The dependencies, relationships, and interactions of these components make them hard to model. 
 
-The methods we use to add resilience add more complexity but this isn't necessarily a bad thing.
-Though we let the number of states and interdependencies increase, we have a level left for us to pull - reversibility.
-If we introduce a behaviour into the system that wasn't expected then we can revert the change, learn and try again.
+Although seemingly random the outputs are governed by the inputs, just unpredictable.
 
-Theory emerging in many domains,
-Tackled by many different disciplines into a core set of common features known as complexity theory.
+Complexity theory gives us a set of tools to understand the patterns and behaviours that occur in these types of systems.
+Although unpredictable and seemingly random, the system follows patterns that can help us understand what levers are available to control the system.
 
-Theoretical framework for modeling complex systems in a variety of domains.
+Features of complex systems
 
 - **Emergence** - Isolated component behaviour leads to non-apparent system behaviour
 - **Non-linearity** - Given the same input, a system response might be different given different state
 - **Adaptive** - Systems regulate themselves with adaptive agents cooperation and competition
 
-Although seemingly random the outputs are governed by the inputs, just unpredictable.
+The methods we use to add resilience add more complexity but this isn't necessarily a bad thing.
+Though we let the number of states and interdependencies increase, we have a level left for us to pull - reversibility.
 
-Chaos theory is the theory that chaos systems, though unpredictable, are not random and that there are patterns that govern their behaviour.
-Governed by feedback loops, not linear equations.
-
-Prediction is difficult even though system is deterministic, not random.
-
-### Irreversibility
+### Reversibility
 
 If the effects of a decision can't be predicted, then it is expensive if that decision can't be reversed.
 
 Most available lever to control complexity in software.
 
-Frequent pushes, using observability, 
-Letting data inform if a feature has been good or no
+Frequent pushes, canary releases, monitoring impact of new features to see if they add value
 
 ### System design and team structure
 
 Our software solution is a complex system, and our organisation is a complex system. [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it and so it is interesting to consider both systems when modeling complexity.
 
 [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it.
+It follows that 
 For this reason, it is interesting to consider both the software system and the organisation when thinking about complexity in our system.
 
 Self-organisation model tells us that global patterns form out of local interactions.
@@ -154,7 +146,7 @@ Self-organisation model tells us that global patterns form out of local interact
 Adaptive theory tells us that systems will regulate themselves using cooperation and competition to pursue their goals.
 - How a learner adapts and reacts to stimuli
 
-Imagine the system we are trying to build and start with team structure
+We can imagine the system we are trying to build and start with team structure
 
 - Keep teams aligned with shared values, principles, and practices
 - Focus on quality
@@ -168,7 +160,8 @@ Imagine the system we are trying to build and start with team structure
 
 It is good to understand how much failure a system can tolerate and still operate within acceptable boundaries.
 
-By accepting that the system will fail we can experiment and learn how it will react under certain conditions.
+Chaos theory is the theory that chaos systems, though unpredictable, are not random and that there are patterns that govern their behaviour.
+Governed by feedback loops, not linear equations.
 
 ### Chaos Engineering
 
