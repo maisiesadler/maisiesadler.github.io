@@ -69,6 +69,7 @@ Critical operations can be isolated into separate components and their resources
 
 Isolation also allows teams to independently maintain different system capabilities.
 
+todo:
 - Fewer states within a domain
 - Lower complexity within boundary
 
@@ -109,9 +110,7 @@ Complex systems are made up of individual components interacting with each other
 The dependencies, relationships, and interactions of these components make them hard to model. 
 
 Although seemingly random the outputs are governed by the inputs, just unpredictable.
-
 Complexity theory gives us a set of tools to understand the patterns and behaviours that occur in these types of systems.
-Although unpredictable and seemingly random, the system follows patterns that can help us understand what levers are available to control the system.
 
 Features of complex systems
 
@@ -132,18 +131,15 @@ Frequent pushes, canary releases, monitoring impact of new features to see if th
 
 ### System design and team structure
 
-Our software solution is a complex system, and our organisation is a complex system. [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it and so it is interesting to consider both systems when modeling complexity.
-
 [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it.
-It follows that 
-For this reason, it is interesting to consider both the software system and the organisation when thinking about complexity in our system.
+It follows that to get to the system we want to build we must first structure our organisation in that way.
 
 Self-organisation model tells us that global patterns form out of local interactions.
 
 Adaptive theory tells us that systems will regulate themselves using cooperation and competition to pursue their goals.
 - How a learner adapts and reacts to stimuli
 
-We can imagine the system we are trying to build and start with team structure
+We can imagine the system 
 
 - Keep teams aligned with shared values, principles, and practices
 - Focus on quality
@@ -151,7 +147,8 @@ We can imagine the system we are trying to build and start with team structure
 - Ensuring the whole team understand _why_ helps them to make the right decision and keep the code clean
 - Test first approach to ensure we only write the code we need
 
-[Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it. It follows that loosely coupled systems are created by loosely coupled teams.
+- todo: Include loose coupling?
+  - It follows that loosely coupled systems are created by loosely coupled teams.
 
 ## Testing system resilience
 
