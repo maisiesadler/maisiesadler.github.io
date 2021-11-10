@@ -23,8 +23,6 @@ Desirable properties of distributed systems
 
 Understanding the requirements of the system is important as it will help to guide our decisions for which behaviours are essential and which can be compromised.
 
-The [fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistributedComputing) tell us that we cannot rely on the network to be reliable or secure. We must make a decision for each operation when we encounter a failure; wait, retry or cancel?
-
 ## Observability
 
 To be able to navigate operations through a complex distributed system observability is key as it gives us operational visibility and helps us understand system bottlenecks.
@@ -33,9 +31,46 @@ We can define the expected behaviour of our system under normal conditions, for 
 
 When we make changes to the system we can monitor metrics such as latency and error rate to ensure we're not unintentionally degrading the user experience.
 
-## Design patterns
+## Encountering Failure
 
-So what patterns can we use to add resilience into our system?
+The [fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistributedComputing) tell us that we cannot rely on the network to be reliable or secure. We must make a decision for each operation when we encounter a failure; wait, retry or cancel?
+
+### Wait
+
+How likely is it that the result is just about to be returned?
+
+If a network connection is open for an extended period not only does it have more time to fail but it is consuming resources and could block potentially successful calls.
+
+Use observability to guide what is an acceptable time to wait and use timeouts to cancel after it is unlikely to return successfully.
+
+Another option for waiting for available resources is to use events and queues, messages can be consumed at a steady rate.
+This rate can be increased by scaling the component, ensuring the rate isn't so high we start overwhelming downstream resources such as databases.
+
+### Retry
+
+In a distributed system it is possible that a process is hanging due to a transient failure and that retrying the call could be successful. This can be done in memory or by re-queuing a message.
+
+Some complications to be aware of
+- **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must add a request identifier and de-duplicate
+- **Ordering** - Out of order messages can apply updates incorrectly, this can potentially be dealt with using timestamps or versions
+- **Retry Storm** - Too many retries can end up doing more harm than good
+
+### Cancel
+
+Is it acceptable to degrade certain functionality if it means other, potentially more critical, operations can continue?
+
+Isolated functionality can be switched off using bulkheads and circuit breakers, this protects downstream resources and also allows the application to continue processing other potentially successful operations.
+Traffic can be intermittently let through to test if service can be resumed.
+
+## Preventing Failure
+
+There are some patterns we can use in an attempt to make it less likely to encounter a failure however, we must be aware of their trade-offs.
+
+### Isolation
+
+Critical operations can be isolated into separate components and their resources can be isolated, this prevents them from being affected by failure in other parts of the system.
+
+Isolation also allows teams to independently maintain different system capabilities.
 
 ### Scaling
 
@@ -67,40 +102,6 @@ This pattern introduces some complications to be aware of
 - **Ordering** - An earlier message could undo the work of a more recent message, this can be configured in a queue, or potentially dealt with using timestamps or versions
 
 Event-driven architecture is loosely coupled, the event doesn't know about the consequences it can cause.
-
-### Isolation
-
-Critical operations can be isolated into separate components and their resources can be isolated, this prevents them from being affected by failure in other parts of the system.
-
-Isolation also allows teams to independently maintain different system capabilities.
-
-### Degrading functionality
-
-Is it sufficient to return a partial response?
-
-Can we turn off parts of the system to protect other parts?
-
-#### Bulkheads
-
-A bulkhead is a pattern where part of the functionality is switched off to allow the rest of the system to continue.
-The system is designed into isolated components that can be switched off in the event of failure.
-
-#### Feature toggle
-
-Feature toggle can be used to manually enable and disable features and paths without a deployment.
-
-#### Circuit breakers
-
-Logic for automatically sealing a bulkhead on certain failures, requests can be intermittently let through to test if the downstream resources are available before resuming service.
-This protects downstream resources and allows the application to continue processing other potentially successful operations.
-
-#### Timeouts and Retries
-
-If a call is taking a long time in a distributed system, it could be because it is connected to a bad or overwhelmed instance and sometimes it is better to cancel the call and retry.
-
-"A long time" could be different for each operation and we can use our observability tools to guide us here.
-
-Similar to events, if the operation is not idempotent then the request can only be retried if provisions have been put in place to deal with duplicates.
 
 ## Tackling complexity
 
