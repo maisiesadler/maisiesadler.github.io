@@ -68,10 +68,9 @@ There are some patterns we can use in an attempt to make it less likely to encou
 Critical operations can be isolated into separate components and their resources can be isolated, this prevents them from being affected by failure in other parts of the system.
 
 Isolation also allows teams to independently maintain different system capabilities.
+A large system can be split into logical [bounded contexts](https://martinfowler.com/bliki/BoundedContext.html) with explicitly defined relationships.
 
-todo:
-- Fewer states within a domain
-- Lower complexity within boundary
+Within these domain boundaries there is a lower complexity since there are fewer states and interactions that can occur.
 
 ### Scaling
 
@@ -127,7 +126,7 @@ If the effects of a decision can't be predicted, then it is expensive if that de
 
 Most available lever to control complexity in software.
 
-Frequent pushes, canary releases, monitoring impact of new features to see if they add value
+Frequent pushes, canary releases, monitoring impact of new features to see if they add value.
 
 ### System design and team structure
 
@@ -136,33 +135,31 @@ It follows that to get to the system we want to build we must first structure ou
 
 Self-organisation model tells us that global patterns form out of local interactions.
 
-Adaptive theory tells us that systems will regulate themselves using cooperation and competition to pursue their goals.
-- How a learner adapts and reacts to stimuli
-
-We can imagine the system 
+Adaptive theory tells us that system components act and react to each others behaviours and will regulate themselves using cooperation and competition to pursue their goals.
 
 - Keep teams aligned with shared values, principles, and practices
 - Focus on quality
-- Defining domain boundaries lowers the cognitive complexity for engineers
 - Ensuring the whole team understand _why_ helps them to make the right decision and keep the code clean
-- Test first approach to ensure we only write the code we need
+- Teams with well defined responsiblities
 
 - todo: Include loose coupling?
   - It follows that loosely coupled systems are created by loosely coupled teams.
+  - Defining domain boundaries lowers the cognitive complexity for engineers
 
 ## Testing system resilience
 
 It is good to understand how much failure a system can tolerate and still operate within acceptable boundaries.
+
+Process to verify a hypothesis made against the steady-state of a system or learn something new about it's behaviour.
 
 Chaos theory is the theory that chaos systems, though unpredictable, are not random and that there are patterns that govern their behaviour.
 Governed by feedback loops, not linear equations.
 
 ### Chaos Engineering
 
-Chaos Engineering is the practice of running experiments on a system to observe how it reacts.
+Chaos Engineering is the practice of running experiments to uncover systemic weakness.
 
-Start with one-off experiments or game days. When the experiment is well defined it can be automated and run continuously.
-
+- Start with one-off experiments or game days, when the experiment is well defined it can be automated and run continuously
 - Choose experiments based on real-world events and incidents
 - Once confident, run the experiment in production
 - Have a rollback plan in place and revert once you have learned something
