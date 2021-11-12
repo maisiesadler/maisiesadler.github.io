@@ -13,14 +13,6 @@ First a few definitions,
 - **Complex Systems** - A system composed of many parts interacting with each other
 - **Distributed Systems** - A system is distributed if there are multiple components spread over multiple hosts
 
-Desirable properties of distributed systems
-
-- **Fault-tolerant** - Can recover from component failures without performing incorrect actions
-- **Highly available** - Can restore operations, allowing it to resume service after a component has failed
-- **Consistent** - Can coordinate actions by multiple components in the presence of concurrency and failure
-- **Transparent** - The user is unaware that processes and components are distributed across multiple computers
-- **Cost-efficient** - We must keep spending in check to keep the product adding value
-
 Understanding the requirements of the system is important as it will help to guide our decisions for which behaviours are essential and which can be compromised.
 
 ## Observability
@@ -61,7 +53,7 @@ Traffic can be intermittently let through to test if service can be resumed.
 
 ## Preventing Failure
 
-There are some patterns we can use in an attempt to make it less likely to encounter a failure however, we must be aware of their trade-offs.
+There are some patterns we can use to attempt to reduce the chance of encountering a failure. However, we must be aware of the trade-offs.
 
 ### Isolation
 
@@ -108,14 +100,17 @@ Event-driven architecture is loosely coupled, the event doesn't know about the c
 Complex systems are made up of individual components interacting with each other, as a system scales it becomes more complex.
 The dependencies, relationships, and interactions of these components make them hard to model. 
 
+These systems often exhibit non-linear behaviour, meaning that the response can be different given the same input depending on state and similar inputs does not mean similar outputs.
+
 Although seemingly random the outputs are governed by the inputs, just unpredictable.
 Complexity theory gives us a set of tools to understand the patterns and behaviours that occur in these types of systems.
 
-Features of complex systems
+Chaos theory is the theory that chaos systems, though unpredictable, are not random and that there are patterns that govern their behaviour.
+Governed by feedback loops, not linear equations.
 
-- **Emergence** - Isolated component behaviour leads to non-apparent system behaviour
-- **Non-linearity** - Given the same input, a system response might be different given different state
-- **Adaptive** - Systems regulate themselves with adaptive agents cooperation and competition
+Self-organisation model tells us that global patterns form out of local interactions.
+
+Adaptive theory tells us that system components act and react to each others behaviours and will regulate themselves using cooperation and competition to pursue their goals.
 
 The methods we use to add resilience add more complexity but this isn't necessarily a bad thing.
 Though we let the number of states and interdependencies increase, we have a level left for us to pull - reversibility.
@@ -124,40 +119,19 @@ Though we let the number of states and interdependencies increase, we have a lev
 
 If the effects of a decision can't be predicted, then it is expensive if that decision can't be reversed.
 
-Most available lever to control complexity in software.
+Practices such as frequent pushes of small changes and canary releases allow us to minimise the impact of a bad change, and roll it back as soon as we can.
+New features can be monitored to measure the impact and to see if they add value.
 
-Frequent pushes, canary releases, monitoring impact of new features to see if they add value.
+### Verifying Resilience
 
-### System design and team structure
-
-[Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it.
-It follows that to get to the system we want to build we must first structure our organisation in that way.
-
-Self-organisation model tells us that global patterns form out of local interactions.
-
-Adaptive theory tells us that system components act and react to each others behaviours and will regulate themselves using cooperation and competition to pursue their goals.
-
-- Keep teams aligned with shared values, principles, and practices
-- Focus on quality
-- Ensuring the whole team understand _why_ helps them to make the right decision and keep the code clean
-- Teams with well defined responsiblities
-
-- todo: Include loose coupling?
-  - It follows that loosely coupled systems are created by loosely coupled teams.
-  - Defining domain boundaries lowers the cognitive complexity for engineers
-
-## Testing system resilience
 
 It is good to understand how much failure a system can tolerate and still operate within acceptable boundaries.
 
-Process to verify a hypothesis made against the steady-state of a system or learn something new about it's behaviour.
-
-Chaos theory is the theory that chaos systems, though unpredictable, are not random and that there are patterns that govern their behaviour.
-Governed by feedback loops, not linear equations.
-
-### Chaos Engineering
+#### Chaos Engineering
 
 Chaos Engineering is the practice of running experiments to uncover systemic weakness.
+
+Start by creating a hypothesis about the system behaviour during real world events and aim to either prove the theory or learn something new.
 
 - Start with one-off experiments or game days, when the experiment is well defined it can be automated and run continuously
 - Choose experiments based on real-world events and incidents
@@ -165,6 +139,17 @@ Chaos Engineering is the practice of running experiments to uncover systemic wea
 - Have a rollback plan in place and revert once you have learned something
 
 This can reduce the on-call burden not only by giving higher confidence in the system but can serve as on-call training. Engineers get a sense of the chaos already in the system, become familiar with the observability tools and are engaged and focused on resilience.
+
+### System design and team structure
+
+[Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it.
+It follows that to get to the system we want to build we must first structure our organisation in that way.
+
+- Keep teams aligned with shared values, principles, and practices
+- Focus on quality
+- Ensuring the whole team understand _why_ helps them to make the right decision and keep the code clean
+- Teams with well defined responsiblities
+
 
 ## Conclusion
 
