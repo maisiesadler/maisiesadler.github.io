@@ -33,7 +33,7 @@ How likely is it that the result is just about to be returned?
 
 If a network connection is open for an extended period not only does it have more time to fail but it is consuming resources and could block potentially successful calls.
 
-Use observability to guide what is an acceptable time to wait and use timeouts to cancel after it is unlikely to return successfully.
+Use observability tools to guide what is an acceptable time to wait and use timeouts to cancel after it is unlikely to return successfully.
 
 ### Retry
 
@@ -42,7 +42,7 @@ In a distributed system it is possible that a process is hanging due to a transi
 Some complications to be aware of
 - **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must add a request identifier and de-duplicate
 - **Ordering** - Out of order messages can apply updates incorrectly, this can potentially be dealt with using timestamps or versions
-- **Retry Storm** - Too many retries can end up doing more harm than good
+- **Retry Storm** - Frequent retries can make it hard for a system to recover
 
 ### Cancel
 
@@ -57,25 +57,25 @@ There are some patterns we can use to attempt to reduce the chance of encounteri
 
 ### Isolation
 
-Critical operations can be isolated into separate components and their resources can be isolated, this prevents them from being affected by failure in other parts of the system.
+Critical operations can be split up into separate components and their resources can be isolated, this prevents them from being affected by failure in other parts of the system.
 
 Isolation also allows teams to independently maintain different system capabilities.
 A large system can be split into logical [bounded contexts](https://martinfowler.com/bliki/BoundedContext.html) with explicitly defined relationships.
 
-Within these domain boundaries there is a lower complexity since there are fewer states and interactions that can occur.
+Within these domain boundaries there is less complexity since there are fewer states and interactions that can occur.
 
 ### Scaling
 
 Adding more resources to be able to handle more requests.
 This can be _horizontal_ by adding more similar resources, or _veritical_ by increasing the size of existing resources.
 
-Must be cautious of overwhelming downstream resources.
+This should be controlled so we do not overwhelm downstream resources.
 
 ### Caching
 
 Is it ok to return slightly stale data if it can be accessed much more quickly?
 
-Can we preempt what the user will request and cache the value ahead of time?
+Can we preempt what the user will request and precalculate the value ahead of time?
 
 If so, [caching](https://aws.amazon.com/caching/) the data could be a good option to increase availability and reduce load on the rest of the system.
 
@@ -84,10 +84,9 @@ The system should eventually update and be correct and this type of system is kn
 ### Events and Queues
 
 Events can be used to durably capture a request for an operation.
-This increases availability by allowing an operation to resume after a component has failed.
+This increases availability by allowing an operation to resume after a failing component has recovered.
 
-A component consuming messages from a queue can process messages at a steady rate.
-This rate can be increased by scaling the component, ensuring the rate isn't so high we start overwhelming downstream resources.
+The consuming component can process messages at a steady rate, this rate can be increased by scaling the component.
 
 This pattern introduces some complications to be aware of
 - **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must add a request identifier and de-duplicate
@@ -100,12 +99,11 @@ Event-driven architecture is loosely coupled, the event doesn't know about the c
 Complex systems are made up of individual components interacting with each other, as a system scales it becomes more complex.
 The dependencies, relationships, and interactions of these components make them hard to model. 
 
-These systems often exhibit non-linear behaviour, meaning that the response can be different given the same input depending on the state. Although seemingly random the outputs are governed by the inputs, just unpredictable.
+These systems often exhibit non-linear behaviour, meaning that the same inputs do not always produce the same outputs and a small change in inputs can produce unproportional changes to the outputs.
 
 Complexity theory gives us a set of tools to understand the patterns and behaviours that occur in these types of systems.
 
-Chaos theory is the theory that chaos systems, though unpredictable, are not random and that there are patterns that govern their behaviour.
-Governed by feedback loops, not linear equations.
+Chaos theory is the theory that complex systems, though unpredictable, are not random and that there are patterns that govern their behaviour - feedback loops not linear equations.
 
 Self-organisation model tells us that global patterns form out of local interactions.
 
@@ -130,11 +128,10 @@ It is good to understand how much failure a system can tolerate and still operat
 Chaos Engineering is the practice of running experiments to uncover systemic weakness.
 
 Start by creating a hypothesis about the system behaviour during real-world events and aim to either prove the theory or learn something new.
+Have a rollback plan in place and revert once you have learned something.
 
-- Start with one-off experiments or game days, when the experiment is well defined it can be automated and run continuously
-- Choose experiments based on real-world events and incidents
-- Once confident, run the experiment in production
-- Have a rollback plan in place and revert once you have learned something
+Choose experiments based on real-world events and incidents.
+The experiment might be more valuable if it is run in production, as that is the system we are trying to understand.
 
 This can reduce the on-call burden not only by giving higher confidence in the system but can serve as on-call training. Engineers get a sense of the chaos already in the system, become familiar with the observability tools, and are engaged and focused on resilience.
 
@@ -143,10 +140,9 @@ This can reduce the on-call burden not only by giving higher confidence in the s
 [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it.
 It follows that to get to the system we want to build we must first structure our organisation in that way.
 
-- Keep teams aligned with shared values, principles, and practices
-- Focus on quality
-- Ensuring the whole team understand _why_ helps them to make the right decision and keep the code clean
-- Teams with-well defined responsibilities
+Ensuring the team understand the domain and using consistent language will flow down into the code.
+
+Keeping teams well aligned with shared values, principles, and practices will help keep a consistent code base.
 
 ## Conclusion
 
