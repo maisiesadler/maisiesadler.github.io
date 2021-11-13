@@ -91,7 +91,9 @@ Event-driven architecture is loosely coupled, the event doesn't know about the c
 With every new feature our software systems have more states and interactions making them harder to model.
 Complex systems are made up of individual components interacting with each other, as a system grows it becomes more complex.
 
-All is not lost, if we accept our system is complex we can look to complexity theory to give us a set of tools to understand the patterns and behaviours we are seeing.
+We add more logic and states to increase resilience add in turn add more complexity.
+
+All is not lost, if we accept our system is and will continue to be complex then we can look to complexity theory to give us a set of tools to understand the patterns and behaviours we are seeing.
 
 ### Complexity Theory
 
@@ -103,7 +105,6 @@ These systems often exhibit **non-linear** behaviour, meaning that the same inpu
 
 **Adaptive theory** tells us that system components act and react to each other and will regulate themselves using cooperation and competition to pursue their goals.
 
-In software, we add more logic and states to increase resilience add in turn add more complexity, but this isn't necessarily a bad thing.
 Though we let the number of states and interdependencies increase, we have a level left for us to pull - reversibility.
 
 #### Reversibility
@@ -122,7 +123,7 @@ Chaos Engineering is the practice of running experiments to uncover systemic wea
 We can define the expected behaviour of our system under normal conditions and then hypothesise that this will still be true during real-world events.
 For example, _"We expect 99% availability while processing 200 orders per second while 30% of nodes are unavailable."_
 
-We run an experiment to either prove the theory or learn something new and have a rollback plan in place and revert once something has been learnt.
+We can then run an experiment to either prove the theory or learn something new.
 
 This can reduce the on-call burden not only by giving higher confidence in the system but can serve as on-call training. Engineers get a sense of the chaos already in the system, become familiar with the observability tools, and are engaged and focused on resilience.
 
