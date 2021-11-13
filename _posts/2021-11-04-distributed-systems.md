@@ -86,25 +86,27 @@ This pattern introduces some complications to be aware of
 
 Event-driven architecture is loosely coupled, the event doesn't know about the consequences it can cause.
 
-## Tackling complexity
+## Embracing Failure
 
-Complex systems are made up of individual components interacting with each other, as a system scales it becomes more complex.
-With every new feature the system has more states and interactions making it hard to model. 
+With every new feature our software systems have more states and interactions making them harder to model.
+Complex systems are made up of individual components interacting with each other, as a system grows it becomes more complex.
 
-These systems often exhibit non-linear behaviour, meaning that the same inputs do not always produce the same outputs and a small change in inputs can produce unproportional changes to the outputs.
+All is not lost, complexity theory gives us a set of tools to understand the patterns and behaviours that occur in these types of systems.
 
-Complexity theory gives us a set of tools to understand the patterns and behaviours that occur in these types of systems.
+### Complexity Theory
 
-Chaos theory is the theory that complex systems, though unpredictable, are not random and that there are patterns that govern their behaviour - feedback loops not linear equations.
+These systems often exhibit **non-linear** behaviour, meaning that the same inputs do not always produce the same outputs and a small change in inputs can produce unproportional changes to the outputs.
 
-Self-organisation model tells us that global patterns form out of local interactions.
+**Chaos theory** is the theory that complex systems, though unpredictable, are not random and that there are patterns that govern their behaviour - feedback loops not linear equations.
 
-Adaptive theory tells us that system components act and react to each other and will regulate themselves using cooperation and competition to pursue their goals.
+**Self-organisation** model tells us that global patterns form out of local interactions.
 
-In software, we add resilience add in turn add more complexity, but this isn't necessarily a bad thing.
+**Adaptive theory** tells us that system components act and react to each other and will regulate themselves using cooperation and competition to pursue their goals.
+
+In software, we add more logic and states to increase resilience add in turn add more complexity, but this isn't necessarily a bad thing.
 Though we let the number of states and interdependencies increase, we have a level left for us to pull - reversibility.
 
-### Reversibility
+#### Reversibility
 
 If the effects of a decision can't be predicted, then it is expensive if that decision can't be reversed.
 
