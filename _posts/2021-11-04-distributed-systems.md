@@ -15,14 +15,6 @@ First a few definitions,
 
 Understanding the requirements of the system is important as it will help to guide our decisions for which behaviours are essential and which can be compromised.
 
-## Observability
-
-To be able to navigate operations through a complex distributed system observability is key as it gives us operational visibility and helps us understand system bottlenecks.
-
-We can define the expected behaviour of our system under normal conditions, for example, "We expect 99% availability while processing 200 orders per second".
-
-When we make changes to the system we can monitor metrics such as latency and error rate to ensure we're not unintentionally degrading the user experience.
-
 ## Encountering Failure
 
 The [fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistributedComputing) tell us that we cannot rely on the network to be reliable or secure. We must decide for each operation when we encounter a failure; wait, retry or cancel?
@@ -97,7 +89,7 @@ Event-driven architecture is loosely coupled, the event doesn't know about the c
 ## Tackling complexity
 
 Complex systems are made up of individual components interacting with each other, as a system scales it becomes more complex.
-The dependencies, relationships, and interactions of these components make them hard to model. 
+With every new feature the system has more states and interactions making it hard to model. 
 
 These systems often exhibit non-linear behaviour, meaning that the same inputs do not always produce the same outputs and a small change in inputs can produce unproportional changes to the outputs.
 
@@ -117,7 +109,9 @@ Though we let the number of states and interdependencies increase, we have a lev
 If the effects of a decision can't be predicted, then it is expensive if that decision can't be reversed.
 
 Practices such as frequent pushes of small changes and canary releases allow us to minimise the impact of a bad change, and roll it back as soon as we can.
-New features can be monitored to measure the impact and to see if they add value.
+
+When we make changes to the system we can monitor metrics such as latency and error rate to ensure we're not unintentionally degrading the user experience.
+We can also monitor the effect of new features to measure the impact and to see if they add value.
 
 ### Verifying Resilience
 
@@ -127,7 +121,8 @@ It is good to understand how much failure a system can tolerate and still operat
 
 Chaos Engineering is the practice of running experiments to uncover systemic weakness.
 
-Start by creating a hypothesis about the system behaviour during real-world events and aim to either prove the theory or learn something new.
+We can define the expected behaviour of our system under normal conditions, for example, "We expect 99% availability while processing 200 orders per second".
+And then hypothesis about the system behaviour during real-world events and aim to either prove the theory or learn something new.
 Have a rollback plan in place and revert once you have learned something.
 
 Choose experiments based on real-world events and incidents.
