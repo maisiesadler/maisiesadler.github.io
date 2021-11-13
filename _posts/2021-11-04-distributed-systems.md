@@ -116,7 +116,7 @@ Practices such as frequent pushes of small changes and canary releases allow us 
 When we make changes to the system we can monitor metrics such as latency and error rate to ensure we're not unintentionally degrading the user experience.
 We can also monitor the effect of new features to measure the impact and to see if they add value.
 
-### Chaos Engineering
+### Verifying Resilience
 
 Chaos Engineering is the practice of running experiments to uncover systemic weakness. It helps us to understand how much failure a system can tolerate and still operate within acceptable boundaries.
 
