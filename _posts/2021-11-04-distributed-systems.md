@@ -89,7 +89,7 @@ Event-driven architecture is loosely coupled, the event doesn't know about the c
 ## Embracing Failure
 
 With every new feature our software systems have more states and interactions making them harder to model.
-Complex systems are made up of individual components interacting with each other, as a system grows it becomes more complex.
+Since complex systems are made up of individual components interacting with each other, as a system grows and scales it becomes more complex.
 
 We add more logic and states to increase resilience add in turn add more complexity.
 
