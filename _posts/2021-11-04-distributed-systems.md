@@ -91,11 +91,11 @@ Event-driven architecture is loosely coupled, the event doesn't know about the c
 With every new feature our software systems have more states and interactions making them harder to model.
 Complex systems are made up of individual components interacting with each other, as a system grows it becomes more complex.
 
-All is not lost, complexity theory gives us a set of tools to understand the patterns and behaviours that occur in these types of systems.
+All is not lost, if we accept our system is complex we can look to complexity theory to give us a set of tools to understand the patterns and behaviours we are seeing.
 
 ### Complexity Theory
 
-These systems often exhibit **non-linear** behaviour, meaning that the same inputs do not always produce the same outputs and a small change in inputs can produce unproportional changes to the outputs.
+These systems often exhibit **non-linear** behaviour, meaning that the same inputs do not always produce the same outputs and a small change in inputs can produce un-proportional changes to the outputs.
 
 **Chaos theory** is the theory that complex systems, though unpredictable, are not random and that there are patterns that govern their behaviour - feedback loops not linear equations.
 
@@ -108,27 +108,21 @@ Though we let the number of states and interdependencies increase, we have a lev
 
 #### Reversibility
 
-If the effects of a decision can't be predicted, then it is expensive if that decision can't be reversed.
+If the effects of a decision can't always be predicted, then it is expensive if that decision can't be reversed.
 
 Practices such as frequent pushes of small changes and canary releases allow us to minimise the impact of a bad change, and roll it back as soon as we can.
 
 When we make changes to the system we can monitor metrics such as latency and error rate to ensure we're not unintentionally degrading the user experience.
 We can also monitor the effect of new features to measure the impact and to see if they add value.
 
-### Verifying Resilience
+### Chaos Engineering
 
-It is good to understand how much failure a system can tolerate and still operate within acceptable boundaries.
+Chaos Engineering is the practice of running experiments to uncover systemic weakness. It helps us to understand how much failure a system can tolerate and still operate within acceptable boundaries.
 
-#### Chaos Engineering
+We can define the expected behaviour of our system under normal conditions and then hypothesise that this will still be true during real-world events.
+For example, _"We expect 99% availability while processing 200 orders per second while 30% of nodes are unavailable."_
 
-Chaos Engineering is the practice of running experiments to uncover systemic weakness.
-
-We can define the expected behaviour of our system under normal conditions, for example, "We expect 99% availability while processing 200 orders per second".
-And then hypothesis about the system behaviour during real-world events and aim to either prove the theory or learn something new.
-Have a rollback plan in place and revert once you have learned something.
-
-Choose experiments based on real-world events and incidents.
-The experiment might be more valuable if it is run in production, as that is the system we are trying to understand.
+We run an experiment to either prove the theory or learn something new and have a rollback plan in place and revert once something has been learnt.
 
 This can reduce the on-call burden not only by giving higher confidence in the system but can serve as on-call training. Engineers get a sense of the chaos already in the system, become familiar with the observability tools, and are engaged and focused on resilience.
 
@@ -137,9 +131,9 @@ This can reduce the on-call burden not only by giving higher confidence in the s
 [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it.
 It follows that to get to the system we want to build we must first structure our organisation in that way.
 
-Ensuring the team understand the domain and using consistent language will flow down into the code.
+Ensuring the team understands the domain and using consistent language will flow down into the code.
 
-Keeping teams well aligned with shared values, principles, and practices will help keep a consistent code base.
+Keeping teams well aligned with shared values, principles, and practices will help keep a consistent codebase.
 
 ## Conclusion
 
