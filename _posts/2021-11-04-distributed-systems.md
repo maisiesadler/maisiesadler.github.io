@@ -138,10 +138,9 @@ Keeping teams well aligned with shared values, principles, and practices will he
 
 ## Conclusion
 
-Distributed systems are part of life working on modern software.
-Over time the system grows and becomes more distributed and becomes more and more complex.
+Distributed systems are part of life working on modern software and over time the system grows and becomes more distributed and complex.
 We add more complexity to add resilience and do our best to prevent accidental complexity.
-But chaos and complexity will still prevail in distributed systems, if we accept this then we can begin to use better-suited models and techniques.
+But chaos and complexity will inevitably prevail in distributed systems, if we accept this then we can begin to use better-suited models and techniques.
 
 - 🛡 Protect resources where possible
 - 💡 Be aware of the trade-offs introduced by a pattern
