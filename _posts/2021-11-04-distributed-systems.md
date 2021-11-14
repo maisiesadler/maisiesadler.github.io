@@ -29,18 +29,18 @@ Use observability tools to guide what is an acceptable time to wait and use time
 
 ### Retry
 
-In a distributed system it is possible that a process is hanging due to a transient failure and that retrying the call could be successful. This can be done in memory or by re-queuing a message.
+It is possible that an operation is hanging due to a transient failure and that retrying the call could be successful.
 
 Some complications to be aware of
 - **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must add a request identifier and de-duplicate
-- **Ordering** - Out of order messages can apply updates incorrectly, this can potentially be dealt with using timestamps or versions
+- **Ordering** - Out-of-order messages can cause updates to be applied incorrectly, we can timestamps or versions to help us here
 - **Retry Storm** - Frequent retries can make it hard for a system to recover
 
 ### Cancel
 
 Is it acceptable to degrade certain functionality if it means other, potentially more critical, operations can continue?
 
-Isolated functionality can be switched off using bulkheads and circuit breakers, this protects downstream resources and also allows the application to continue processing other potentially successful operations.
+Isolated functionality can be switched off using bulkheads and circuit breakers. This protects downstream resources and also allows the application to continue processing other potentially successful operations.
 Traffic can be intermittently let through to test if service can be resumed.
 
 ## Preventing Failure
@@ -71,7 +71,7 @@ Can we preempt what the user will request and precalculate the value ahead of ti
 
 If so, [caching](https://aws.amazon.com/caching/) the data could be a good option to increase availability and reduce load on the rest of the system.
 
-The system should eventually update and be correct and this type of system is known as eventually consistent.
+Though the data can be out of date, the system should eventually update and be correct and this type of system is known as _eventually consistent_.
 
 ### Events and Queues
 
@@ -138,7 +138,10 @@ Keeping teams well aligned with shared values, principles, and practices will he
 
 ## Conclusion
 
-Distributed systems are part of life working on modern software. We must understand the compromises we make with each decision - whether it's added complexity and maintenance, degraded experience, or just more expensive - there will always be a cost to added resilience.
+Distributed systems are part of life working on modern software.
+Over time the system grows and becomes more distributed and becomes more and more complex.
+We add more complexity to add resilience and do our best to prevent accidental complexity.
+But chaos and complexity will still prevail in distributed systems, if we accept this then we can begin to use better-suited models and techniques.
 
 - 🛡 Protect resources where possible
 - 💡 Be aware of the trade-offs introduced by a pattern
