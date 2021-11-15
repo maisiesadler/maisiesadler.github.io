@@ -75,16 +75,12 @@ Can we preempt what the user will request and precalculate the value ahead of ti
 
 If so, [caching](https://aws.amazon.com/caching/) the data could be a good option to increase availability and reduce load on the rest of the system.
 
-<Trade-off between consistency and availability>
-
 [CAP theorem](https://en.wikipedia.org/wiki/CAP_theorem) tells us that we can only have two out of consistency, availability and partition tolerance.
 When we encounter a network failure we do not have partition tolerance and so the decision must be consistency or availability.
 Caching favours availability.
 
 Caching is not one size fits all and the logic around how to access a cache could be different per operation.
 It can add complexity and, if we're not careful, can give another place for something to go wrong.
-
-<maybe write that it adds complexity>
 
 ### Events and Queues
 
@@ -93,12 +89,10 @@ This increases availability by allowing an operation to resume after a failing c
 
 The consuming component can process messages at a steady rate, this rate can be increased by scaling the component.
 
-<forced down async path, complicated if need to wait>
-
 Event-driven architecture is loosely coupled, not decoupled - typing and contracts still important. The publishing component is not aware of how it's events are used and the consequences it can cause.
 
-<maybe more in this section?>
-<- monitoring, unbounded queues>
+This pattern brings with it complexity as it can become complicated if the operation needs to be awaited.
+It can be hard to monitor and trace an operation as it flows through the system.
 
 ## Embracing Failure
 
