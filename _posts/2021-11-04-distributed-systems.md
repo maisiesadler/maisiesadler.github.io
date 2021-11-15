@@ -4,7 +4,7 @@ title:  "Resilience in Distributed Systems"
 tags: distributed-systems resilience design architecture
 ---
 
-This article explores the decisions we must make when we encounter failure, some patterns we can use to increase resilience and prevent failure for an operation and finally how embracing the failure within the system can lead us to more appropriate models and tooling.
+This article explores the decisions we must make when we encounter failure, some patterns we can use to increase resilience and prevent failure and finally how embracing the failure within the system can lead us to more appropriate models and tooling.
 
 First a few definitions,
 
@@ -31,21 +31,18 @@ Use observability tools to guide what is an acceptable time to wait and use time
 It is possible that an operation failed due to a transient issue and that retrying the call could be successful.
 
 Some complications to be aware of
-- **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must mitigate this, for example by adding a request identifier <and de-duplicate on the server-side?>
+- **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must mitigate this, for example by adding a request identifier and de-duplicating on the server-side
 - **Ordering** - Out-of-order messages can cause updates to be applied incorrectly, we can timestamps or versions to help us here
-- **Retry Storm** - If many requests are cancelled at the same time and then retried at fixed intervals it can make it hard for a system to recover
+- **Retry Storm** - If many requests are cancelled at the same time then retrying at fixed intervals it can make it hard for a system to recover
 
 ### Cancel
 
 Is it acceptable to degrade certain functionality if it means other, potentially more critical, operations can continue?
 
-A bulkhead is a pattern that does exactly that, the system is designed such that isolated functionality can be switched of in the event of failure.
-
-This could be a manual process with feature toggle. Or automated with circuit breakers.
+A bulkhead is a pattern that does exactly that, the system is designed such that isolated functionality can be switched of in the event of failure. This could be a manual process with feature toggle or automated with circuit breakers.
 
 Circuit breakers switch off functionality on given error conditions and intermittently let traffic through to test if service can be resumed.
 This protects downstream resources and also allows the application to continue processing other potentially successful operations.
-Traffic can be intermittently let through to test if service can be resumed.
 
 ## Preventing Failure
 
@@ -78,7 +75,7 @@ Can we preempt what the user will request and precalculate the value ahead of ti
 
 If so, [caching](https://aws.amazon.com/caching/) the data could be a good option to increase availability and reduce load on the rest of the system.
 
-<Trade-off between consistency and availability.>
+<Trade-off between consistency and availability>
 
 [CAP theorem](https://en.wikipedia.org/wiki/CAP_theorem) tells us that we can only have two out of consistency, availability and partition tolerance.
 When we encounter a network failure we do not have partition tolerance and so the decision must be consistency or availability.
