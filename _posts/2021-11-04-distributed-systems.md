@@ -125,13 +125,11 @@ We can also monitor the effect of new features to measure the impact and to see 
 ### System design and team structure
 
 [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it.
-It follows that to get to the system we want to build we must first structure our organisation in that way.
+It follows that to create a decoupled system with isolation and certain boundaries we must first structure our organisation in that way.
 
 We can help to reduce accidental complexity by ensuring the team understands the domain and using consistent language.
 
 Keeping teams well aligned with shared values, principles, and practices will help keep a consistent codebase.
-
-To create a decoupled system with isolation and boundaries we can start with team structure. 
 
 ## Conclusion
 
