@@ -22,7 +22,7 @@ The [fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistr
 
 How likely is it that the result is just about to be returned?
 
-If a network connection is open for an extended period not only does it have more time to fail but it is consuming resources and could block potentially successful calls.
+If a network connection is open for an extended period not only does it have more time to fail, but it is consuming resources and could block potentially successful calls.
 
 Use observability tools to guide what is an acceptable time to wait and use timeouts to cancel after it is unlikely to return successfully.
 
@@ -33,7 +33,7 @@ It is possible that an operation failed due to a transient issue and that retryi
 Some complications to be aware of
 - **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must mitigate this, for example by adding a request identifier and de-duplicating on the server-side
 - **Ordering** - Out-of-order messages can cause updates to be applied incorrectly, we can timestamps or versions to help us here
-- **Retry Storm** - If many requests are cancelled at the same time then retrying at fixed intervals it can make it hard for a system to recover
+- **Retry Storm** - If many requests are cancelled at the same time then retrying at fixed intervals can make it hard for a system to recover
 
 ### Cancel
 
@@ -88,7 +88,7 @@ This increases availability by allowing an operation to resume after a failing c
 
 The consuming component can process messages at a steady rate, this rate can be increased by scaling the component.
 
-Event-driven architecture is loosely coupled, not decoupled and so we are still bound to contracts. The publishing component is not aware of how it's events are used and the consequences it can cause.
+Event-driven architecture is loosely coupled, not decoupled and so we are still bound to contracts. The publishing component is not aware of how its events are used and the consequences it can cause.
 
 This pattern brings with it complexity as it can become complicated if the operation needs to be awaited.
 It can be hard to monitor and trace an operation as it flows through the system.
@@ -115,7 +115,7 @@ This can reduce the on-call burden not only by giving higher confidence in the s
 
 ### Reversibility
 
-In an article about [tackling complexity](https://m.facebook.com/nt/screen/?params=%7B%22note_id%22%3A681695435785808%7D&path=%2Fnotes%2Fnote%2F&refsrc=deprecated&_rdr) Martin Fowler argues that complexity is made up of four factors; states, interdependencies, uncertainty and irreversibility. In many software systems the states, interdependencies and uncertainty inevitably grow and so we have one lever left for us to pull - reversibility. If the effects of a decision can't always be predicted, then it is expensive if that decision can't be reversed.
+In an article about [tackling complexity](https://m.facebook.com/nt/screen/?params=%7B%22note_id%22%3A681695435785808%7D&path=%2Fnotes%2Fnote%2F&refsrc=deprecated&_rdr) Martin Fowler argues that complexity is made up of four factors; states, interdependencies, uncertainty, and irreversibility. In many software systems the states, interdependencies, and uncertainty inevitably grow and so we have one lever left for us to pull - reversibility. If the effects of a decision can't always be predicted, then it is expensive if that decision can't be reversed.
 
 Practices such as frequent pushes of small changes and canary releases allow us to minimise the impact of a bad change, and roll it back as soon as we can.
 
@@ -135,7 +135,7 @@ Keeping teams well aligned with shared values, principles, and practices will he
 
 Distributed systems are part of life working on modern software and over time the system grows and becomes more distributed and complex.
 We add more complexity to add resilience and do our best to prevent accidental complexity.
-But chaos and complexity will inevitably prevail in distributed systems, if we accept this then we can begin to use better-suited models and techniques.
+By accepting the chaos and complexity prevalent in our systems then we can begin to use better-suited models and techniques.
 
 - 🛡 Protect resources where possible
 - 💡 Be aware of the trade-offs introduced by a pattern
