@@ -4,7 +4,6 @@ title:  "Resilience in Distributed Systems"
 tags: distributed-systems resilience design architecture
 ---
 
-Modern systems are increasingly complex and distributed.
 This article outlines some patterns and practices for adding resilience to complex, distributed systems.
 
 First a few definitions,
@@ -29,18 +28,23 @@ Use observability tools to guide what is an acceptable time to wait and use time
 
 ### Retry
 
-It is possible that an operation is hanging due to a transient failure and that retrying the call could be successful.
+It is possible that an operation failed due to a transient issue and that retrying the call could be successful.
 
 Some complications to be aware of
-- **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must add a request identifier and de-duplicate
+- **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must mitigate this, for example by adding a request identifier <and de-duplicate on the server-side?>
 - **Ordering** - Out-of-order messages can cause updates to be applied incorrectly, we can timestamps or versions to help us here
-- **Retry Storm** - Frequent retries can make it hard for a system to recover
+- **Retry Storm** - If many requests are cancelled at the same time and then retried at fixed intervals it can make it hard for a system to recover
 
 ### Cancel
 
 Is it acceptable to degrade certain functionality if it means other, potentially more critical, operations can continue?
 
-Isolated functionality can be switched off using bulkheads and circuit breakers. This protects downstream resources and also allows the application to continue processing other potentially successful operations.
+A bulkhead is a pattern that does exactly that, the system is designed such that isolated functionality can be switched of in the event of failure.
+
+This could be a manual process with feature toggle. Or automated with circuit breakers.
+
+Circuit breakers switch off functionality on given error conditions and intermittently let traffic through to test if service can be resumed.
+This protects downstream resources and also allows the application to continue processing other potentially successful operations.
 Traffic can be intermittently let through to test if service can be resumed.
 
 ## Preventing Failure
@@ -55,6 +59,8 @@ Isolation also allows teams to independently maintain different system capabilit
 A large system can be split into logical [bounded contexts](https://martinfowler.com/bliki/BoundedContext.html) with explicitly defined relationships.
 
 Within these domain boundaries there is less complexity since there are fewer states and interactions that can occur.
+
+<note on coupling here?>
 
 ### Scaling
 
@@ -71,7 +77,15 @@ Can we preempt what the user will request and precalculate the value ahead of ti
 
 If so, [caching](https://aws.amazon.com/caching/) the data could be a good option to increase availability and reduce load on the rest of the system.
 
+<Trade-off between consistency and availability.>
+
+CAP theorem tells us that we can only have two out of Consistency, Availability and Partition Tolerance. When we encounter a network failure the decision must be Consistency or Availability.
+
 Though the data can be out of date, the system should eventually update and be correct and this type of system is known as _eventually consistent_.
+
+<maybe write that it adds complexity>
+
+<CAP theorem?>
 
 ### Events and Queues
 
@@ -80,36 +94,26 @@ This increases availability by allowing an operation to resume after a failing c
 
 The consuming component can process messages at a steady rate, this rate can be increased by scaling the component.
 
-This pattern introduces some complications to be aware of
-- **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must add a request identifier and de-duplicate
-- **Ordering** - An earlier message could undo the work of a more recent message, this can be configured in a queue, or potentially dealt with using timestamps or versions
+<idempotent is duplicated>
+<forced down async path, complicated if need to wait>
 
-Event-driven architecture is loosely coupled, the event doesn't know about the consequences it can cause.
+Event-driven architecture is loosely coupled, the publisher doesn't know about the consequences it can cause.
+Event-driven architecture is loosely coupled, not decoupled - typing and contracts still important.
+
+<maybe more in this section?>
+
+- monitoring, unbounded queues
 
 ## Embracing Failure
 
 With every new feature our software systems have more states and interactions making them harder to model.
 Since complex systems are made up of individual components interacting with each other, as a system grows and scales it becomes more complex.
 
-We add more logic and states to increase resilience add in turn add more complexity.
+We add more logic and states to increase resilience and in turn add more complexity.
 
 All is not lost, if we accept our system is and will continue to be complex then we can look to complexity theory to give us a set of tools to understand the patterns and behaviours we are seeing.
 
-### Complexity Theory
-
-These systems often exhibit **non-linear** behaviour, meaning that the same inputs do not always produce the same outputs and a small change in inputs can produce un-proportional changes to the outputs.
-
-**Chaos theory** is the theory that complex systems, though unpredictable, are not random and that there are patterns that govern their behaviour - feedback loops not linear equations.
-
-**Self-organisation** model tells us that global patterns form out of local interactions.
-
-**Adaptive theory** tells us that system components act and react to each other and will regulate themselves using cooperation and competition to pursue their goals.
-
-Though we let the number of states and interdependencies increase, we have a level left for us to pull - reversibility.
-
-#### Reversibility
-
-If the effects of a decision can't always be predicted, then it is expensive if that decision can't be reversed.
+Though we let the number of states and interdependencies increase, we have a level left for us to pull - **reversibility**. If the effects of a decision can't always be predicted, then it is expensive if that decision can't be reversed.
 
 Practices such as frequent pushes of small changes and canary releases allow us to minimise the impact of a bad change, and roll it back as soon as we can.
 
@@ -129,9 +133,12 @@ This can reduce the on-call burden not only by giving higher confidence in the s
 
 ### System design and team structure
 
+<not to do with resiliency>
+
 [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it.
 It follows that to get to the system we want to build we must first structure our organisation in that way.
 
+<don't use resiliency or complexity>
 Ensuring the team understands the domain and using consistent language will flow down into the code.
 
 Keeping teams well aligned with shared values, principles, and practices will help keep a consistent codebase.
