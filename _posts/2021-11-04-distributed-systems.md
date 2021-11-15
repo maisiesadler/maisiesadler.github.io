@@ -75,12 +75,11 @@ Can we preempt what the user will request and precalculate the value ahead of ti
 
 If so, [caching](https://aws.amazon.com/caching/) the data could be a good option to increase availability and reduce load on the rest of the system.
 
-[CAP theorem](https://en.wikipedia.org/wiki/CAP_theorem) tells us that we can only have two out of consistency, availability and partition tolerance.
-When we encounter a network failure we do not have partition tolerance and so the decision must be consistency or availability.
-Caching favours availability.
+When we encounter a network failure we do not have partition tolerance and so the decision must be consistency or availability ([CAP theorem](https://en.wikipedia.org/wiki/CAP_theorem)).
+Using caching to increase availability is at the expense of consistency, the system should eventually update and become consistent. This pattern is known as eventually consistent.
 
 Caching is not one size fits all and the logic around how to access a cache could be different per operation.
-It can add complexity and, if we're not careful, can give another place for something to go wrong.
+It adds complexity and, if we're not careful, can give another place for something to go wrong.
 
 ### Events and Queues
 
@@ -89,7 +88,7 @@ This increases availability by allowing an operation to resume after a failing c
 
 The consuming component can process messages at a steady rate, this rate can be increased by scaling the component.
 
-Event-driven architecture is loosely coupled, not decoupled - typing and contracts still important. The publishing component is not aware of how it's events are used and the consequences it can cause.
+Event-driven architecture is loosely coupled, not decoupled and so we are still bound to contracts. The publishing component is not aware of how it's events are used and the consequences it can cause.
 
 This pattern brings with it complexity as it can become complicated if the operation needs to be awaited.
 It can be hard to monitor and trace an operation as it flows through the system.
@@ -116,7 +115,7 @@ This can reduce the on-call burden not only by giving higher confidence in the s
 
 ### Reversibility
 
-[Martin Fowler](https://m.facebook.com/nt/screen/?params=%7B%22note_id%22%3A681695435785808%7D&path=%2Fnotes%2Fnote%2F&refsrc=deprecated&_rdr) argues that complexity is made up of four factors; states, interdependencies, uncertainty and irreversibility. In many software systems the states, interdependencies and uncertainty inevitably grow and so we have one lever left for us to pull - reversibility. If the effects of a decision can't always be predicted, then it is expensive if that decision can't be reversed.
+In an article about [tackling complexity](https://m.facebook.com/nt/screen/?params=%7B%22note_id%22%3A681695435785808%7D&path=%2Fnotes%2Fnote%2F&refsrc=deprecated&_rdr) Martin Fowler argues that complexity is made up of four factors; states, interdependencies, uncertainty and irreversibility. In many software systems the states, interdependencies and uncertainty inevitably grow and so we have one lever left for us to pull - reversibility. If the effects of a decision can't always be predicted, then it is expensive if that decision can't be reversed.
 
 Practices such as frequent pushes of small changes and canary releases allow us to minimise the impact of a bad change, and roll it back as soon as we can.
 
@@ -131,6 +130,8 @@ It follows that to get to the system we want to build we must first structure ou
 We can help to reduce accidental complexity by ensuring the team understands the domain and using consistent language.
 
 Keeping teams well aligned with shared values, principles, and practices will help keep a consistent codebase.
+
+To create a decoupled system with isolation and boundaries we can start with team structure. 
 
 ## Conclusion
 
