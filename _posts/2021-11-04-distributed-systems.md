@@ -58,8 +58,6 @@ A large system can be split into logical [bounded contexts](https://martinfowler
 
 Within these domain boundaries there is less complexity since there are fewer states and interactions that can occur.
 
-<note on coupling here?>
-
 ### Scaling
 
 Adding more resources to be able to handle more requests.
