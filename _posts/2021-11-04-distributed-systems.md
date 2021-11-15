@@ -4,7 +4,7 @@ title:  "Resilience in Distributed Systems"
 tags: distributed-systems resilience design architecture
 ---
 
-This article explores the decisions we must make when we encounter failure, some patterns we can use to increase resilience and prevent failure and finally how embracing the failure within the system can lead us to more appropriate models and tooling.
+This article explores some patterns and practices for adding resilience to complex, distributed systems.
 
 First a few definitions,
 
