@@ -4,8 +4,7 @@ title:  "Resilience in Distributed Systems"
 tags: distributed-systems resilience design architecture
 ---
 
-Modern systems are increasingly complex and distributed.
-This article outlines some patterns and practices for adding resilience to complex, distributed systems.
+This article explores some patterns and practices for adding resilience to complex, distributed systems.
 
 First a few definitions,
 
@@ -23,29 +22,32 @@ The [fallacies of distributed systems](http://wiki.c2.com/?EightFallaciesOfDistr
 
 How likely is it that the result is just about to be returned?
 
-If a network connection is open for an extended period not only does it have more time to fail but it is consuming resources and could block potentially successful calls.
+If a network connection is open for an extended period not only does it have more time to fail, but it is consuming resources and could block potentially successful calls.
 
 Use observability tools to guide what is an acceptable time to wait and use timeouts to cancel after it is unlikely to return successfully.
 
 ### Retry
 
-It is possible that an operation is hanging due to a transient failure and that retrying the call could be successful.
+It is possible that an operation failed due to a transient issue and that retrying the call could be successful.
 
 Some complications to be aware of
-- **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must add a request identifier and de-duplicate
+- **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must mitigate this, for example by adding a request identifier and de-duplicating on the server-side
 - **Ordering** - Out-of-order messages can cause updates to be applied incorrectly, we can timestamps or versions to help us here
-- **Retry Storm** - Frequent retries can make it hard for a system to recover
+- **Retry Storm** - If many requests are cancelled at the same time then retrying at fixed intervals can make it hard for a system to recover
 
 ### Cancel
 
 Is it acceptable to degrade certain functionality if it means other, potentially more critical, operations can continue?
 
-Isolated functionality can be switched off using bulkheads and circuit breakers. This protects downstream resources and also allows the application to continue processing other potentially successful operations.
-Traffic can be intermittently let through to test if service can be resumed.
+A bulkhead is a pattern that does exactly that, the system is designed such that isolated functionality can be switched of in the event of failure. This could be a manual process with feature toggle or automated with circuit breakers.
+
+Circuit breakers switch off functionality on given error conditions and intermittently let traffic through to test if service can be resumed.
+This protects downstream resources and also allows the application to continue processing other potentially successful operations.
 
 ## Preventing Failure
 
-There are some patterns we can use to attempt to reduce the chance of encountering a failure. However, we must be aware of the trade-offs.
+There are some patterns we can use to attempt to reduce the chance of encountering a failure.
+However, we must be aware of the trade-offs.
 
 ### Isolation
 
@@ -55,6 +57,8 @@ Isolation also allows teams to independently maintain different system capabilit
 A large system can be split into logical [bounded contexts](https://martinfowler.com/bliki/BoundedContext.html) with explicitly defined relationships.
 
 Within these domain boundaries there is less complexity since there are fewer states and interactions that can occur.
+
+<note on coupling here?>
 
 ### Scaling
 
@@ -71,7 +75,11 @@ Can we preempt what the user will request and precalculate the value ahead of ti
 
 If so, [caching](https://aws.amazon.com/caching/) the data could be a good option to increase availability and reduce load on the rest of the system.
 
-Though the data can be out of date, the system should eventually update and be correct and this type of system is known as _eventually consistent_.
+When we encounter a network failure we do not have partition tolerance and so the decision must be consistency or availability ([CAP theorem](https://en.wikipedia.org/wiki/CAP_theorem)).
+Using caching to increase availability is at the expense of consistency, the system should eventually update and become consistent. This pattern is known as eventually consistent.
+
+Caching is not one size fits all and the logic around how to access a cache could be different per operation.
+It adds complexity and, if we're not careful, can give another place for something to go wrong.
 
 ### Events and Queues
 
@@ -80,45 +88,23 @@ This increases availability by allowing an operation to resume after a failing c
 
 The consuming component can process messages at a steady rate, this rate can be increased by scaling the component.
 
-This pattern introduces some complications to be aware of
-- **Duplicates** - If the operation is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) we must add a request identifier and de-duplicate
-- **Ordering** - An earlier message could undo the work of a more recent message, this can be configured in a queue, or potentially dealt with using timestamps or versions
+Event-driven architecture is loosely coupled, not decoupled and so we are still bound to contracts. The publishing component is not aware of how its events are used and the consequences it can cause.
 
-Event-driven architecture is loosely coupled, the event doesn't know about the consequences it can cause.
+This pattern brings with it complexity as it can become complicated if the operation needs to be awaited.
+It can be hard to monitor and trace an operation as it flows through the system.
 
 ## Embracing Failure
 
 With every new feature our software systems have more states and interactions making them harder to model.
 Since complex systems are made up of individual components interacting with each other, as a system grows and scales it becomes more complex.
 
-We add more logic and states to increase resilience add in turn add more complexity.
+We add more logic and states to increase resilience and in turn add more complexity.
 
-All is not lost, if we accept our system is and will continue to be complex then we can look to complexity theory to give us a set of tools to understand the patterns and behaviours we are seeing.
-
-### Complexity Theory
-
-These systems often exhibit **non-linear** behaviour, meaning that the same inputs do not always produce the same outputs and a small change in inputs can produce un-proportional changes to the outputs.
-
-**Chaos theory** is the theory that complex systems, though unpredictable, are not random and that there are patterns that govern their behaviour - feedback loops not linear equations.
-
-**Self-organisation** model tells us that global patterns form out of local interactions.
-
-**Adaptive theory** tells us that system components act and react to each other and will regulate themselves using cooperation and competition to pursue their goals.
-
-Though we let the number of states and interdependencies increase, we have a level left for us to pull - reversibility.
-
-#### Reversibility
-
-If the effects of a decision can't always be predicted, then it is expensive if that decision can't be reversed.
-
-Practices such as frequent pushes of small changes and canary releases allow us to minimise the impact of a bad change, and roll it back as soon as we can.
-
-When we make changes to the system we can monitor metrics such as latency and error rate to ensure we're not unintentionally degrading the user experience.
-We can also monitor the effect of new features to measure the impact and to see if they add value.
+All is not lost, if we accept our system is and will continue to be complex then we can look to [complexity theory](https://www.youtube.com/watch?v=i-ladOjo1QA&list=TLPQMTAxMTIwMjHtudT33UyVOA) to give us a set of tools to understand the patterns and behaviours we are seeing.
 
 ### Verifying Resilience
 
-Chaos Engineering is the practice of running experiments to uncover systemic weakness. It helps us to understand how much failure a system can tolerate and still operate within acceptable boundaries.
+[Chaos Engineering](https://principlesofchaos.org/) is the practice of running experiments to uncover systemic weakness. It helps us to understand how much failure a system can tolerate and still operate within acceptable boundaries.
 
 We can define the expected behaviour of our system under normal conditions and then hypothesise that this will still be true during real-world events.
 For example, _"We expect 99% availability while processing 200 orders per second while 30% of nodes are unavailable."_
@@ -127,12 +113,21 @@ We can then run an experiment to either prove the theory or learn something new.
 
 This can reduce the on-call burden not only by giving higher confidence in the system but can serve as on-call training. Engineers get a sense of the chaos already in the system, become familiar with the observability tools, and are engaged and focused on resilience.
 
+### Reversibility
+
+In an article about [tackling complexity](https://m.facebook.com/nt/screen/?params=%7B%22note_id%22%3A681695435785808%7D&path=%2Fnotes%2Fnote%2F&refsrc=deprecated&_rdr) Martin Fowler argues that complexity is made up of four factors; states, interdependencies, uncertainty, and irreversibility. In many software systems the states, interdependencies, and uncertainty inevitably grow and so we have one lever left for us to pull - reversibility. If the effects of a decision can't always be predicted, then it is expensive if that decision can't be reversed.
+
+Practices such as frequent pushes of small changes and canary releases allow us to minimise the impact of a bad change, and roll it back as soon as we can.
+
+When we make changes to the system we can monitor metrics such as latency and error rate to ensure we're not unintentionally degrading the user experience.
+We can also monitor the effect of new features to measure the impact and to see if they add value.
+
 ### System design and team structure
 
 [Conway's law](https://www.thoughtworks.com/insights/blog/demystifying-conways-law) tells us that that the structure of the system will reflect the organization that built it.
-It follows that to get to the system we want to build we must first structure our organisation in that way.
+It follows that to create a decoupled system with isolation and certain boundaries we must first structure our organisation in that way.
 
-Ensuring the team understands the domain and using consistent language will flow down into the code.
+We can help to reduce accidental complexity by ensuring the team understands the domain and using consistent language.
 
 Keeping teams well aligned with shared values, principles, and practices will help keep a consistent codebase.
 
@@ -140,7 +135,7 @@ Keeping teams well aligned with shared values, principles, and practices will he
 
 Distributed systems are part of life working on modern software and over time the system grows and becomes more distributed and complex.
 We add more complexity to add resilience and do our best to prevent accidental complexity.
-But chaos and complexity will inevitably prevail in distributed systems, if we accept this then we can begin to use better-suited models and techniques.
+By accepting the chaos and complexity prevalent in our systems then we can begin to use better-suited models and techniques.
 
 - 🛡 Protect resources where possible
 - 💡 Be aware of the trade-offs introduced by a pattern
