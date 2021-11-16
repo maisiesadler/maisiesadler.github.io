@@ -77,7 +77,7 @@ When we encounter a network failure we do not have partition tolerance and so th
 Using caching to increase availability is at the expense of consistency, the system should eventually update and become consistent. This pattern is known as eventually consistent.
 
 Caching is not one size fits all and the logic around how to access a cache could be different per operation.
-It adds complexity and, if we're not careful, can give another place for something to go wrong.
+It adds complexity and, even if we are careful, can give another place for something to go wrong.
 
 ### Events and Queues
 
