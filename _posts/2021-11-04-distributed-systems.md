@@ -39,7 +39,7 @@ Some complications to be aware of
 
 Is it acceptable to degrade certain functionality if it means other, potentially more critical, operations can continue?
 
-A bulkhead is a pattern that does exactly that, the system is designed such that isolated functionality can be switched of in the event of failure. This could be a manual process with feature toggle or automated with circuit breakers.
+A bulkhead is a pattern that does exactly that, the system is designed such that isolated functionality can be switched off in the event of failure. This could be a manual process with feature toggle or automated with circuit breakers.
 
 Circuit breakers switch off functionality on given error conditions and intermittently let traffic through to test if service can be resumed.
 This protects downstream resources and also allows the application to continue processing other potentially successful operations.
@@ -67,7 +67,7 @@ This should be controlled so we do not overwhelm downstream resources.
 
 ### Caching
 
-Is it ok to return slightly stale data if it can be accessed much more quickly?
+Is it okay to return slightly stale data if it can be accessed much more quickly?
 
 Can we preempt what the user will request and precalculate the value ahead of time?
 
