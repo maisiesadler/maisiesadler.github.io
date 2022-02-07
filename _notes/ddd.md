@@ -4,9 +4,7 @@ about: Developer
 layout: note
 ---
 
-Domain models are abstractions and _models_ to be useful not realistic
-
-Narrow focus on a specific problem
+Domain models are abstractions to be _useful_ not _realistic_. They are a narrow focus on a specific problem.
 
 Domain model problem can be described in psuedocode
 Can have real discussions with domain experts about problem and what needs to be done
@@ -19,26 +17,22 @@ If problem changes and model doesn't fit well
 - Maybe another place with a different bounded context with a different model
 - Bend model to fit new problem (default, if not thinking of the other options)
 
---> think of model that fits your most difficult problems
+> Think of model that fits your most difficult problems
 
 ## Bounded Contexts
 
-Trying to find ubiquitous language, but within boundaries
+Trying to find ubiquitous language, but within boundaries sinces it's too broad if trying to find language to use for everything.
 
-Too broad if trying to find language to use for everything
-
---> wonder if we should define boundaries within the boundaries we have defined, per service?! Should this be outlined in the readme??
-
-Create _many_ ubiquitous languages
+> Create _many_ ubiquitous languages.
 
 One measure of system complexity is how much tracing we would have to do to be able to work out what was going on
-For example from `order.Place()` -> what is `order` , `Placce` etc
+For example from `order.Place()` -> what is `order` , `Place` etc
 
-Highly coupled systems -> need to look at lot of stuff. Maybe think ever will understand what will happen, won't change things
+Highly coupled systems -> need to look at lot of stuff.
 
-Aim for multiple models in multiple bounded contexts focused on distinct problem sets
+Aim for multiple models in multiple bounded contexts focused on distinct problem sets.
 
-Trying to find ownership and who is responsible for maintainance
+Trying to find ownership and who is responsible for maintainance.
 
 ## Finding bounded context
 
@@ -58,14 +52,15 @@ Looking for clues
 
 Create composite application with context that spans multiple other contexts that holds info relating to that
 
-Why do we do it? Monolothic applications don't scale, trip over each other
--> move faster
+Why do we do it?
+- Monolothic applications don't scale, trip over each other
+- To move faster
 
 Good boundaries improve flow -> Theory of Constraints
 
 --> using bounded contexts to fix and remove bottlenecks
 
-Use DDD to find clues about language for models --> Hypthesis
+Use DDD to find clues about language for models --> Hypothesis
 Use Theory of Contraints to choose correct model
 
 Boundaries must evolve -> new business requirements or insights _challenge_ existing assumptions
@@ -89,7 +84,6 @@ How to create alignment for developers
 - Cross-functional pairing
 - Event storming
 
-<opinion>
 Bounded contexts are a proxy heuristic for autonomy
 - Autonomy contexts
 - Owned by single team
