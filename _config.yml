@@ -14,5 +14,4 @@ plugins:
 collections:
   - notes:
       output: true
-      permalink: /:collection/:title
 
