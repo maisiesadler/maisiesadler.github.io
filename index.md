@@ -32,9 +32,9 @@ author: 'Maisie Sadler'
 ## Notes
 
 <ul>
-  {% for note in site.notes %}
+  {% for n in site.notes %}
     <li>
-      <a href="{{ note.url }}">{{ note.title }}</a> _{{note.about}}_
+      <a href="{{ n.url }}">{{ n.title }}</a> _{{n.about}}_
     </li>
   {% endfor %}
 </ul>
