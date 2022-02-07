@@ -29,7 +29,12 @@ author: 'Maisie Sadler'
   </ul>
 {% endfor %} -->
 
-{% for staff_member in site.notes %}
-  <h2>{{ staff_member.name }} - {{ staff_member.position }}</h2>
-  <p>{{ staff_member.content | markdownify }}</p>
-{% endfor %}
+## Notes
+
+<ul>
+  {% for note in site.notes %}
+    <li>
+      <a href="{{ note.url }}">{{ note.title }}</a> _{{note.about}}_
+    </li>
+  {% endfor %}
+</ul>

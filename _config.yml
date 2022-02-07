@@ -12,4 +12,8 @@ plugins:
  - jekyll-remote-theme
 
 collections:
-  - notes
+  - notes:
+      output: true
+      permalink: /:collection/:name
+      title: true
+      about: true
