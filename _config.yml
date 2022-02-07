@@ -12,6 +12,5 @@ plugins:
  - jekyll-remote-theme
 
 collections:
-  - notes:
-      output: true
-
+  notes:
+    output: true
