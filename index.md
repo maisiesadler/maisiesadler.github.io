@@ -1,6 +1,7 @@
 ---
 layout: default
 title: 'Maisie Sadler'
+author: 'Maisie Sadler'
 ---
 
 ## Projects
@@ -27,3 +28,8 @@ title: 'Maisie Sadler'
     {% endfor %}
   </ul>
 {% endfor %} -->
+
+{% for staff_member in site.notes %}
+  <h2>{{ staff_member.name }} - {{ staff_member.position }}</h2>
+  <p>{{ staff_member.content | markdownify }}</p>
+{% endfor %}
