@@ -15,5 +15,4 @@ collections:
   - notes:
       output: true
       permalink: /:collection/:name
-      title: true
-      about: true
+
