@@ -1,6 +1,7 @@
 ---
 title: Domain Driven Design
 about: Developer
+layout: note
 ---
 
 Domain models are abstractions and _models_ to be useful not realistic

@@ -1,0 +1,9 @@
+---
+layout: default
+---
+
+<h1>{{ page.title }}</h1>
+
+<p class="view">by {{ page.author | default: site.author }}</p>
+
+{{content}}
