@@ -1,7 +1,7 @@
 ---
 title: Domain Driven Design
-about: Developer
 layout: note
+tags: design
 ---
 
 Domain models are abstractions to be _useful_ not _realistic_. They are a narrow focus on a specific problem.
