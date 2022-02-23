@@ -28,8 +28,10 @@ author: 'Maisie Sadler'
     {% endfor %}
   </ul>
 {% endfor %} -->
-
+<!-- 
 ## Notes
+
+I learn by writing and making notes, here are some of my takeaways from some videos and books:
 
 <ul>
   {% for n in site.notes %}
@@ -37,4 +39,4 @@ author: 'Maisie Sadler'
       <a href="{{ n.url }}">{{ n.title }}</a> {{n.about}}
     </li>
   {% endfor %}
-</ul>
+</ul> -->
